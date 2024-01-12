@@ -8,7 +8,286 @@ import _fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import Autocomplete from "react-google-autocomplete";
+const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
 
+const NFTcontract="0x006c4237E2233fc5b3793aD9E200076C9Cf99a0E";
+const myabi=[
+	{
+	  "inputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "constructor"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "owner",
+		  "type": "address"
+		}
+	  ],
+	  "name": "OwnableInvalidOwner",
+	  "type": "error"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "account",
+		  "type": "address"
+		}
+	  ],
+	  "name": "OwnableUnauthorizedAccount",
+	  "type": "error"
+	},
+	{
+	  "anonymous": false,
+	  "inputs": [
+		{
+		  "indexed": true,
+		  "internalType": "address",
+		  "name": "previousOwner",
+		  "type": "address"
+		},
+		{
+		  "indexed": true,
+		  "internalType": "address",
+		  "name": "newOwner",
+		  "type": "address"
+		}
+	  ],
+	  "name": "OwnershipTransferred",
+	  "type": "event"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "",
+		  "type": "address"
+		},
+		{
+		  "internalType": "address",
+		  "name": "",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "",
+		  "type": "uint256"
+		}
+	  ],
+	  "name": "bonusInfo",
+	  "outputs": [
+		{
+		  "internalType": "address",
+		  "name": "Sender",
+		  "type": "address"
+		},
+		{
+		  "internalType": "address",
+		  "name": "Receiver",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "bonusAmount",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "startDate",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "sellByDate",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "propertySold",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "haveExpectedSalesPrice",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "expectedSalesPrice",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "meetSalesCondition",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "postDeadlineCheck",
+		  "type": "bool"
+		}
+	  ],
+	  "stateMutability": "view",
+	  "type": "function"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "Receiver",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "propertyNumber",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "startDateInDays",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "sellByDateInDays",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "haveExpectedSalesPrice",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "expectedSalesPrice",
+		  "type": "uint256"
+		}
+	  ],
+	  "name": "createSenderFund",
+	  "outputs": [],
+	  "stateMutability": "payable",
+	  "type": "function"
+	},
+	{
+	  "inputs": [],
+	  "name": "owner",
+	  "outputs": [
+		{
+		  "internalType": "address",
+		  "name": "",
+		  "type": "address"
+		}
+	  ],
+	  "stateMutability": "view",
+	  "type": "function"
+	},
+	{
+	  "inputs": [],
+	  "name": "renounceOwnership",
+	  "outputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "newOwner",
+		  "type": "address"
+		}
+	  ],
+	  "name": "transferOwnership",
+	  "outputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "sender",
+		  "type": "address"
+		},
+		{
+		  "internalType": "address",
+		  "name": "receiver",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "propertyNumber",
+		  "type": "uint256"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "propertySold",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "meetSalesCondition",
+		  "type": "bool"
+		},
+		{
+		  "internalType": "bool",
+		  "name": "postDeadlineCheck",
+		  "type": "bool"
+		}
+	  ],
+	  "name": "updateBonusInfo",
+	  "outputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "Receiver",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "propertyNumber",
+		  "type": "uint256"
+		}
+	  ],
+	  "name": "withdrawFundsReceiver",
+	  "outputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	},
+	{
+	  "inputs": [
+		{
+		  "internalType": "address",
+		  "name": "Receiver",
+		  "type": "address"
+		},
+		{
+		  "internalType": "uint256",
+		  "name": "propertyNumber",
+		  "type": "uint256"
+		}
+	  ],
+	  "name": "withdrawFundsSender",
+	  "outputs": [],
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	},
+	{
+	  "stateMutability": "payable",
+	  "type": "receive"
+	}
+  ];
+
+const {ethers} = require('ethers');
+var provider;
+var MyContract;
+var MyContractwSigner;
 
 
 
@@ -20,6 +299,7 @@ export default function Home() {
   	const [accountAddress, setAccountAddress] = useState(null);
   	const isConnectedToPeraWallet = !!accountAddress;
   	const router = useRouter();
+	const [myaddress,setMyaddress] = useState('');
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -35,7 +315,7 @@ export default function Home() {
 		//Do we need to log in here?
 	}
 
-	async function callContract(APN, account) {
+	async function callContract(APN) {
 		//Here we need to change to ethereum calls
 		/*const algodToken = '';
 		const algodServer = 'https://testnet-api.algonode.cloud';
@@ -65,11 +345,21 @@ export default function Home() {
 				}
 			],
 		});*/
+		provider = new ethers.BrowserProvider(window.ethereum);
+      	const signer = await provider.getSigner();
+      	console.log(signer.address);
+      
 
-		
+      	MyContract = new ethers.Contract(NFTcontract, myabi, provider);
+
+      	MyContractwSigner = await MyContract.connect(signer);
+      	
+
 	
 		try {
-			const results = await atc.execute(algodClient, 3);
+			//to chanhe to contract call
+			//const results = await MyContract.
+			//const results = await atc.execute(algodClient, 3);
 			const active = results.methodResults[0].returnValue
 			if (!active) {
 				setbuttonExistingContract(false);
@@ -97,7 +387,7 @@ export default function Home() {
 
 	async function checkAPN(APN) {
 
-		peraWallet
+		/*peraWallet
 		.reconnectSession()
 		.then((accounts) => {
 			if (peraWallet.isConnected) {
@@ -108,7 +398,8 @@ export default function Home() {
 				login();
 			}
 		})
-		.catch((e) => console.log(e));
+		.catch((e) => console.log(e));*/
+
 
 	}
 
@@ -124,8 +415,13 @@ export default function Home() {
 		router.push(`/newContract?SelAPN=${data}&Address=${data2}`);
 	};
 	
+	const handleSelect = async(place) => {
+		console.log(place);
+	}
+
 	const checkaddress = async() => {
 		// we need to change this one where the address is put in, with the Google API
+		console.log('Google API = '+GOOGLE_API_KEY);
 		var myAPN = document.getElementById("myAPNInput").value;
 		dotenv.config()
 		const API_KEY = process.env.NEXT_PUBLIC_API_KEY
@@ -177,6 +473,25 @@ export default function Home() {
 				<h1 className="text-xl font-bold m-2">Please Enter Your APN ID</h1>
 			  </section>
 			  <section className="flex mb-8">
+			  <Autocomplete
+                
+                apiKey={GOOGLE_API_KEY}
+                style={{
+                    width: "50%",
+                    marginBottom: 8,
+                    paddingInline: 8,
+                    paddingBlock: 4,
+                    borderRadius: 8,
+                    zIndex: 100,
+                }}
+                options={{
+                    types: [],
+                    componentRestrictions: { country: "us" },
+                }}
+                onPlaceSelected={(place) => {
+                    handleSelect(place);
+                }}
+            />
 				<input
 				  type="text"
 				  id="myAPNInput"
@@ -238,11 +553,7 @@ export default function Home() {
 			  {showBalloon && <PopupInfo text={balloonText} closeModal={handleCloseBalloon} isOpen={showBalloon} />}
 			</div>
 	  
-			<div className='flex justify-center contract-right'>
-			  <div className='image-container overflow-hidden ml-40'>
-				<img src='/assets/images/reals.jpg' className="border border-gray-500 opacity-85" style={{ width: "30rem", height: "35rem", borderRadius: "15rem 15rem 0 0" }}></img>
-			  </div>
-			</div>
+			
 	  
 		  </div>
 		</section>
