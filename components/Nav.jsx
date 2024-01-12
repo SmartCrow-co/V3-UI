@@ -2,10 +2,409 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
+//import { PeraWalletConnect } from "@perawallet/connect";
 
+const NFTcontract="0x006c4237E2233fc5b3793aD9E200076C9Cf99a0E";
+const myabi=[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "_realtor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_sellbydays",
+				"type": "uint256"
+			}
+		],
+		"name": "createBonus",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "_realtor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_startdate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_sellbydays",
+				"type": "uint256"
+			}
+		],
+		"name": "createBonusTest",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "parcelid",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastrecordedDate",
+				"type": "uint256"
+			}
+		],
+		"name": "realtorwithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "parcelid",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastrecordedDate",
+				"type": "uint256"
+			}
+		],
+		"name": "sellerwithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonusActive",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonusamount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonusrealtor",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonussellbydate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonusseller",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_parcelid",
+				"type": "string"
+			}
+		],
+		"name": "getBonusstartdate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lastapn",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lastrequestid",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lastselldate",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "parcelbonus",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "parcelid",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "seller",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "realtor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startdate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "sellbydate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "parcellastselldate",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "url",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "urlresult",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
 
-const peraWallet = new PeraWalletConnect();
+const {ethers} = require('ethers');
+var provider;
+var MyContract;
+var MyContractwSigner;
+
+//const peraWallet = new PeraWalletConnect();
 
 const Hometwo = () => {
   	const [accountAddress, setAccountAddress] = useState(null);
@@ -13,34 +412,51 @@ const Hometwo = () => {
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
-		peraWallet
-			.reconnectSession()
-			.then((accounts) => {
-				if (peraWallet.isConnected) {
-					setAccountAddress(accounts[0])
-				}
-			
-			})
-			.catch((e) => console.log(e));
+		 /* if (typeof window.ethereum !== 'undefined') {
+        console.log('Metamask is installed!');
+      
+      }
+      var myprovider = window.ethereum;
+  
+      const accounts = await window.ethereum.send(
+        "eth_requestAccounts"
+      )
+    
+      const address = accounts.result[0];
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner(address);
+
+      MyContract = new ethers.Contract(NFTcontract, myabi, provider);
+
+      MyContractwSigner = await MyContract.connect(signer);*/
 	}, []);
 
 	const disconnect = async () => {
-		peraWallet.disconnect();
+		//peraWallet.disconnect();
 		setAccountAddress(null);
 	}
 
   	const login = async () => {
-		peraWallet
-			.connect()
-			.then((newAccounts) => {
-				peraWallet.connector.on("disconnect", disconnect);
-				setAccountAddress(newAccounts[0]);
-			})
-			.catch((error) => {
-			if (error?.data?.type !== "CONNECT_MODAL_CLOSED") {
-				console.log(error);
-			}
-		});
+      if (typeof window.ethereum !== 'undefined') {
+        console.log('Metamask is installed!');
+      
+      }
+      var myprovider = window.ethereum;
+  
+      /*const accounts = await window.ethereum.sendAsync(
+        "eth_requestAccounts"
+      )*/
+    
+      //const address = accounts.result[0];
+      provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      console.log(signer.address);
+      
+
+      MyContract = new ethers.Contract(NFTcontract, myabi, provider);
+
+      MyContractwSigner = await MyContract.connect(signer);
+      setAccountAddress(signer.address);
 	}
 
   return (
@@ -63,7 +479,7 @@ const Hometwo = () => {
                   type='button'
                   className='black_btn'
                   onClick={isConnectedToPeraWallet ? disconnect : login}>
-                  {isConnectedToPeraWallet ? "Disconnect Pera Wallet" : "Connect Pera Wallet"}
+                  {isConnectedToPeraWallet ? "Disconnect Metamask" : "Connect Metamask"}
                  
                 </button>
           </>
@@ -77,7 +493,7 @@ const Hometwo = () => {
                   className='black_btn'
                   onClick={isConnectedToPeraWallet ? disconnect : login}
                 >
-                  {isConnectedToPeraWallet ? "Disconnect Pera Wallet" : "Connect Pera Wallet"}
+                  {isConnectedToPeraWallet ? "Disconnect Metamask" : "Connect Metamask"}
                 </button>
           </>
         

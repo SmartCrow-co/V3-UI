@@ -2,128 +2,14 @@
 import PopupInfo from '@/components/popupinfo';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { PeraWalletConnect } from "@perawallet/connect";
-import * as algosdk from 'algosdk'
+//import { PeraWalletConnect } from "@perawallet/connect";
+//import * as algosdk from 'algosdk'
 import _fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
-const peraWallet = new PeraWalletConnect();
-const myabi = {
-    "name": "Sender Funds Contract with Beaker",
-    "methods": [
-        {
-            "name": "createFundsInfo",
-            "args": [
-                {
-                    "type": "pay",
-                    "name": "pay"
-                },
-                {
-                    "type": "string",
-                    "name": "propertyNumber"
-                },
-                {
-                    "type": "address",
-                    "name": "Receiver"
-                },
-                {
-                    "type": "uint64",
-                    "name": "startDate"
-                },
-                {
-                    "type": "uint64",
-                    "name": "endDate"
-                },
-                {
-                    "type": "bool",
-                    "name": "haveExpectedSalesPrice"
-                },
-                {
-                    "type": "uint64",
-                    "name": "expectedSalesPrice"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
-        },
-        {
-            "name": "updateSenderFundsItem",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "item_name"
-                },
-                {
-                    "type": "bool",
-                    "name": "propertySold"
-                },
-                {
-                    "type": "bool",
-                    "name": "meetSalesCondition"
-                },
-                {
-                    "type": "bool",
-                    "name": "postDeadlineCheck"
-                }
-            ],
-            "returns": {
-                "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-            }
-        },
-        {
-            "name": "readItem",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "item_name"
-                }
-            ],
-            "returns": {
-                "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-            }
-        },
-        {
-            "name": "readFundsWithdrawnStatus",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "item_name"
-                }
-            ],
-            "returns": {
-                "type": "bool"
-            }
-        },
-        {
-            "name": "WithdrawFundsForReceiver",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "item_name"
-                }
-            ],
-            "returns": {
-                "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-            }
-        },
-        {
-            "name": "WithdrawFundsForSender",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "item_name"
-                }
-            ],
-            "returns": {
-                "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-            }
-        }
-    ],
-    "networks": {}
-}
+
 
 
 export default function Home() {
@@ -137,38 +23,21 @@ export default function Home() {
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
-		peraWallet
-			.reconnectSession()
-			.then((accounts) => {
-				if (peraWallet.isConnected) {
-					setAccountAddress(accounts[0])
-				}
-			
-		})
-		.catch((e) => console.log(e));
+		
 	}, []);
 
 	const disconnect = async () => {
-		peraWallet.disconnect();
+		//peraWallet.disconnect();
 		setAccountAddress(null);
 	}
 
   	const login = async () => {
-		peraWallet
-			.connect()
-			.then((newAccounts) => {
-				peraWallet.connector.on("disconnect", disconnect);
-				setAccountAddress(newAccounts[0]);
-			})
-			.catch((error) => {
-			if (error?.data?.type !== "CONNECT_MODAL_CLOSED") {
-				console.log(error);
-			}
-		});
+		//Do we need to log in here?
 	}
 
 	async function callContract(APN, account) {
-		const algodToken = '';
+		//Here we need to change to ethereum calls
+		/*const algodToken = '';
 		const algodServer = 'https://testnet-api.algonode.cloud';
 		const algodPort = undefined;
 		const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
@@ -195,7 +64,9 @@ export default function Home() {
 					name: new Uint8Array(Buffer.from(APN))
 				}
 			],
-		});
+		});*/
+
+		
 	
 		try {
 			const results = await atc.execute(algodClient, 3);
@@ -225,6 +96,7 @@ export default function Home() {
 	};
 
 	async function checkAPN(APN) {
+
 		peraWallet
 		.reconnectSession()
 		.then((accounts) => {
@@ -253,6 +125,7 @@ export default function Home() {
 	};
 	
 	const checkaddress = async() => {
+		// we need to change this one where the address is put in, with the Google API
 		var myAPN = document.getElementById("myAPNInput").value;
 		dotenv.config()
 		const API_KEY = process.env.NEXT_PUBLIC_API_KEY
