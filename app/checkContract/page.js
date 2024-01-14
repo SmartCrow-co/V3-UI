@@ -10,6 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Autocomplete from "react-google-autocomplete";
 const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
+const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
+
+const axios = require('axios');
+const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
 const NFTcontract="0x006c4237E2233fc5b3793aD9E200076C9Cf99a0E";
 const myabi=[
@@ -300,11 +304,43 @@ export default function Home() {
   	const isConnectedToPeraWallet = !!accountAddress;
   	const router = useRouter();
 	const [myaddress,setMyaddress] = useState('');
+	const [streetaddress, setStreetaddress]=useState('');
+	const [zipcode, setZipcode]=useState(0);
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
 		
 	}, []);
+
+	const getPropertyDetails = async(
+		accessToken, 
+		streetAddress, 
+		postalCode, 
+		orderId) => {
+			  const headers = {
+				  'Access-Token': accessToken,
+				};
+				
+				// Define query parameters
+				const params = {
+				  OrderId: orderId,
+				  StreetAddress: streetAddress,
+				  PostalCode: postalCode,
+				};
+				
+				// Make the API call using Axios
+				axios
+				  .get(apiUrl, { headers, params })
+				  .then((response) => {
+					// Handle the API response
+					console.log('API Response:', response.data);
+				  })
+				  .catch((error) => {
+					// Handle errors
+					console.error('Error calling API:', error.message);
+				  });
+	  }
+	  
 
 	const disconnect = async () => {
 		//peraWallet.disconnect();
@@ -399,7 +435,16 @@ export default function Home() {
 			}
 		})
 		.catch((e) => console.log(e));*/
+		provider = new ethers.BrowserProvider(window.ethereum);
+      	const signer = await provider.getSigner();
+      	console.log(signer.address);
+      
 
+      	MyContract = new ethers.Contract(NFTcontract, myabi, provider);
+
+      	MyContractwSigner = await MyContract.connect(signer);
+
+		
 
 	}
 
@@ -417,11 +462,20 @@ export default function Home() {
 	
 	const handleSelect = async(place) => {
 		console.log(place);
+		setStreetaddress(place['address_components'][1]['long_name']);
+		setZipcode(place['address_components'][7]['long_name']);
 	}
 
 	const checkaddress = async() => {
 		// we need to change this one where the address is put in, with the Google API
-		console.log('Google API = '+GOOGLE_API_KEY);
+		//console.log('Google API = '+GOOGLE_API_KEY);
+		console.log('street = '+streetaddress);
+		console.log('zip = '+zipcode);
+		var myorder = streetaddress+'_'+zipcode;
+		//var myAPN = await getPropertyDetails(PROPERTY_API_KEY,streetaddress,zipcode,myorder);
+		//console.log(myAPN);
+
+		/*
 		var myAPN = document.getElementById("myAPNInput").value;
 		dotenv.config()
 		const API_KEY = process.env.NEXT_PUBLIC_API_KEY
@@ -461,7 +515,7 @@ export default function Home() {
 		else {
 			setBalloonText('Please enter an APN');
 			setShowBalloon(true);
-		}
+		}*/
 		
 	} 
 
@@ -469,9 +523,7 @@ export default function Home() {
 		<section className='contract-wrapper'>
 		  <div className='mb-2 pb-20 container flex space-between flex-end'>
 			<div className='flex-col flex-start pt-4 pb-0 contract-left'>
-			  <section className="text-left mb-4">
-				<h1 className="text-xl font-bold m-2">Please Enter Your APN ID</h1>
-			  </section>
+			  
 			  <section className="flex mb-8">
 			  <Autocomplete
                 
