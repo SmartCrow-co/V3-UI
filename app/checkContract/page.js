@@ -11,281 +11,289 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Autocomplete from "react-google-autocomplete";
 const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
 const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
+const RENTCAST_KEY='6f4fb4d419054be682400744d4bf6d1f'
 
 const axios = require('axios');
 const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
-const NFTcontract="0x006c4237E2233fc5b3793aD9E200076C9Cf99a0E";
+const NFTcontract="0x9Bb2126BEC0e8c37976Ee6F1A635060cA0C42BF8";
 const myabi=[
-	{
-	  "inputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "constructor"
-	},
-	{
-	  "inputs": [
+	
 		{
-		  "internalType": "address",
+		  "inputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "constructor"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "owner",
+			  "type": "address"
+			}
+		  ],
+		  "name": "OwnableInvalidOwner",
+		  "type": "error"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "account",
+			  "type": "address"
+			}
+		  ],
+		  "name": "OwnableUnauthorizedAccount",
+		  "type": "error"
+		},
+		{
+		  "anonymous": false,
+		  "inputs": [
+			{
+			  "indexed": true,
+			  "internalType": "address",
+			  "name": "previousOwner",
+			  "type": "address"
+			},
+			{
+			  "indexed": true,
+			  "internalType": "address",
+			  "name": "newOwner",
+			  "type": "address"
+			}
+		  ],
+		  "name": "OwnershipTransferred",
+		  "type": "event"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "",
+			  "type": "address"
+			},
+			{
+			  "internalType": "address",
+			  "name": "",
+			  "type": "address"
+			},
+			{
+			  "internalType": "string",
+			  "name": "",
+			  "type": "string"
+			}
+		  ],
+		  "name": "bonusInfo",
+		  "outputs": [
+			{
+			  "internalType": "address",
+			  "name": "Sender",
+			  "type": "address"
+			},
+			{
+			  "internalType": "address",
+			  "name": "Receiver",
+			  "type": "address"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "bonusAmount",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "startDate",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "sellByDate",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "propertySold",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "haveExpectedSalesPrice",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "expectedSalesPrice",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "meetSalesCondition",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "postDeadlineCheck",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "fundsWithdrawn",
+			  "type": "bool"
+			}
+		  ],
+		  "stateMutability": "view",
+		  "type": "function"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "Receiver",
+			  "type": "address"
+			},
+			{
+			  "internalType": "string",
+			  "name": "propertyNumber",
+			  "type": "string"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "startDateInDays",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "sellByDateInDays",
+			  "type": "uint256"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "haveExpectedSalesPrice",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "uint256",
+			  "name": "expectedSalesPrice",
+			  "type": "uint256"
+			}
+		  ],
+		  "name": "createSenderFund",
+		  "outputs": [],
+		  "stateMutability": "payable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [],
 		  "name": "owner",
-		  "type": "address"
+		  "outputs": [
+			{
+			  "internalType": "address",
+			  "name": "",
+			  "type": "address"
+			}
+		  ],
+		  "stateMutability": "view",
+		  "type": "function"
+		},
+		{
+		  "inputs": [],
+		  "name": "renounceOwnership",
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "newOwner",
+			  "type": "address"
+			}
+		  ],
+		  "name": "transferOwnership",
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "sender",
+			  "type": "address"
+			},
+			{
+			  "internalType": "address",
+			  "name": "receiver",
+			  "type": "address"
+			},
+			{
+			  "internalType": "string",
+			  "name": "propertyNumber",
+			  "type": "string"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "propertySold",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "meetSalesCondition",
+			  "type": "bool"
+			},
+			{
+			  "internalType": "bool",
+			  "name": "postDeadlineCheck",
+			  "type": "bool"
+			}
+		  ],
+		  "name": "updateBonusInfo",
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "Receiver",
+			  "type": "address"
+			},
+			{
+			  "internalType": "string",
+			  "name": "propertyNumber",
+			  "type": "string"
+			}
+		  ],
+		  "name": "withdrawFundsReceiver",
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "inputs": [
+			{
+			  "internalType": "address",
+			  "name": "Receiver",
+			  "type": "address"
+			},
+			{
+			  "internalType": "string",
+			  "name": "propertyNumber",
+			  "type": "string"
+			}
+		  ],
+		  "name": "withdrawFundsSender",
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "type": "function"
+		},
+		{
+		  "stateMutability": "payable",
+		  "type": "receive"
 		}
-	  ],
-	  "name": "OwnableInvalidOwner",
-	  "type": "error"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "account",
-		  "type": "address"
-		}
-	  ],
-	  "name": "OwnableUnauthorizedAccount",
-	  "type": "error"
-	},
-	{
-	  "anonymous": false,
-	  "inputs": [
-		{
-		  "indexed": true,
-		  "internalType": "address",
-		  "name": "previousOwner",
-		  "type": "address"
-		},
-		{
-		  "indexed": true,
-		  "internalType": "address",
-		  "name": "newOwner",
-		  "type": "address"
-		}
-	  ],
-	  "name": "OwnershipTransferred",
-	  "type": "event"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "",
-		  "type": "address"
-		},
-		{
-		  "internalType": "address",
-		  "name": "",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "",
-		  "type": "uint256"
-		}
-	  ],
-	  "name": "bonusInfo",
-	  "outputs": [
-		{
-		  "internalType": "address",
-		  "name": "Sender",
-		  "type": "address"
-		},
-		{
-		  "internalType": "address",
-		  "name": "Receiver",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "bonusAmount",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "startDate",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "sellByDate",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "propertySold",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "haveExpectedSalesPrice",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "expectedSalesPrice",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "meetSalesCondition",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "postDeadlineCheck",
-		  "type": "bool"
-		}
-	  ],
-	  "stateMutability": "view",
-	  "type": "function"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "Receiver",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "propertyNumber",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "startDateInDays",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "sellByDateInDays",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "haveExpectedSalesPrice",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "expectedSalesPrice",
-		  "type": "uint256"
-		}
-	  ],
-	  "name": "createSenderFund",
-	  "outputs": [],
-	  "stateMutability": "payable",
-	  "type": "function"
-	},
-	{
-	  "inputs": [],
-	  "name": "owner",
-	  "outputs": [
-		{
-		  "internalType": "address",
-		  "name": "",
-		  "type": "address"
-		}
-	  ],
-	  "stateMutability": "view",
-	  "type": "function"
-	},
-	{
-	  "inputs": [],
-	  "name": "renounceOwnership",
-	  "outputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "function"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "newOwner",
-		  "type": "address"
-		}
-	  ],
-	  "name": "transferOwnership",
-	  "outputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "function"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "sender",
-		  "type": "address"
-		},
-		{
-		  "internalType": "address",
-		  "name": "receiver",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "propertyNumber",
-		  "type": "uint256"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "propertySold",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "meetSalesCondition",
-		  "type": "bool"
-		},
-		{
-		  "internalType": "bool",
-		  "name": "postDeadlineCheck",
-		  "type": "bool"
-		}
-	  ],
-	  "name": "updateBonusInfo",
-	  "outputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "function"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "Receiver",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "propertyNumber",
-		  "type": "uint256"
-		}
-	  ],
-	  "name": "withdrawFundsReceiver",
-	  "outputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "function"
-	},
-	{
-	  "inputs": [
-		{
-		  "internalType": "address",
-		  "name": "Receiver",
-		  "type": "address"
-		},
-		{
-		  "internalType": "uint256",
-		  "name": "propertyNumber",
-		  "type": "uint256"
-		}
-	  ],
-	  "name": "withdrawFundsSender",
-	  "outputs": [],
-	  "stateMutability": "nonpayable",
-	  "type": "function"
-	},
-	{
-	  "stateMutability": "payable",
-	  "type": "receive"
-	}
+	  
   ];
 
 const {ethers} = require('ethers');
@@ -423,18 +431,7 @@ export default function Home() {
 
 	async function checkAPN(APN) {
 
-		/*peraWallet
-		.reconnectSession()
-		.then((accounts) => {
-			if (peraWallet.isConnected) {
-				callContract(APN, accounts[0]).then((res) => {
-			});
-			}
-			else {
-				login();
-			}
-		})
-		.catch((e) => console.log(e));*/
+		
 		provider = new ethers.BrowserProvider(window.ethereum);
       	const signer = await provider.getSigner();
       	console.log(signer.address);
@@ -443,9 +440,23 @@ export default function Home() {
       	MyContract = new ethers.Contract(NFTcontract, myabi, provider);
 
       	MyContractwSigner = await MyContract.connect(signer);
-
+		const mysenderwallet = document.getElementById('mysenderwallet').value;
+		const myreceiverwallet = document.getElementById('myreceiverwallet').value;
 		
-
+		console.log('myaddress = '+myaddress);
+		var result = await MyContract.bonusInfo(mysenderwallet,myreceiverwallet,myaddress);
+		var returnresult=1;
+		if (result[0]!=mysenderwallet){
+			setbuttonExistingContract(true);
+			setbuttonNewContract(false);
+			returnresult=0;
+		}
+		else {
+			setbuttonExistingContract(false);
+			setbuttonNewContract(true);
+		}
+		console.log(result);
+		return returnresult;
 	}
 
 	const handleExistingContract = async() => {
@@ -464,6 +475,10 @@ export default function Home() {
 		console.log(place);
 		setStreetaddress(place['address_components'][1]['long_name']);
 		setZipcode(place['address_components'][7]['long_name']);
+		//console.log(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
+		//setMyaddress(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
+		console.log(place['formatted_address']);
+		setMyaddress(place['formatted_address']);
 	}
 
 	const checkaddress = async() => {
@@ -472,6 +487,7 @@ export default function Home() {
 		console.log('street = '+streetaddress);
 		console.log('zip = '+zipcode);
 		var myorder = streetaddress+'_'+zipcode;
+		var response = await checkAPN();
 		//var myAPN = await getPropertyDetails(PROPERTY_API_KEY,streetaddress,zipcode,myorder);
 		//console.log(myAPN);
 
@@ -525,17 +541,32 @@ export default function Home() {
 			<div className='flex-col flex-start pt-4 pb-0 contract-left'>
 			  
 			  <section className="flex mb-8">
+			  <input
+				  type="text"
+				  id="mysenderwallet"
+				  className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
+				  placeholder="Enter Sender Wallet Address"
+				  required
+			/>
+			<input
+				  type="text"
+				  id="myreceiverwallet"
+				  className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
+				  placeholder="Enter Receiver Wallet Address"
+				  required
+			/>
 			  <Autocomplete
                 
                 apiKey={GOOGLE_API_KEY}
-                style={{
+                className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
+				/*style={{
                     width: "50%",
                     marginBottom: 8,
                     paddingInline: 8,
                     paddingBlock: 4,
                     borderRadius: 8,
                     zIndex: 100,
-                }}
+                }}*/
                 options={{
                     types: [],
                     componentRestrictions: { country: "us" },
@@ -544,13 +575,13 @@ export default function Home() {
                     handleSelect(place);
                 }}
             />
-				<input
+				{/*<input
 				  type="text"
 				  id="myAPNInput"
 				  className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
 				  placeholder="Enter APN"
 				  required
-				/>
+			/>*/}
 				<button
 				  type='button'
 				  className='my-2 blue_btn about px-4 py-2'
