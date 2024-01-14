@@ -466,7 +466,7 @@ export default function Home() {
 	};
 
 	const handleNewContract = async() => {
-		var data = document.getElementById("myAPNInput").value;
+		var data = myaddress;
 		const data2 = document.getElementById("addresscheck").value;
 		router.push(`/newContract?SelAPN=${data}&Address=${data2}`);
 	};

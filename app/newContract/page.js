@@ -4,125 +4,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Popup from '@/components/popup';
 import PopupSuccess from '@/components/popupsuccess';
 import PopupInfo from '@/components/popupinfo';
-import { PeraWalletConnect } from "@perawallet/connect";
-import * as algosdk from 'algosdk'
+//import { PeraWalletConnect } from "@perawallet/connect";
+//import * as algosdk from 'algosdk'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
-const peraWallet = new PeraWalletConnect();
+
 const myabi = {
-  "name": "Sender Funds Contract with Beaker",
-  "methods": [
-      {
-          "name": "createFundsInfo",
-          "args": [
-              {
-                  "type": "pay",
-                  "name": "pay"
-              },
-              {
-                  "type": "string",
-                  "name": "propertyNumber"
-              },
-              {
-                  "type": "address",
-                  "name": "Receiver"
-              },
-              {
-                  "type": "uint64",
-                  "name": "startDate"
-              },
-              {
-                  "type": "uint64",
-                  "name": "endDate"
-              },
-              {
-                  "type": "bool",
-                  "name": "haveExpectedSalesPrice"
-              },
-              {
-                  "type": "uint64",
-                  "name": "expectedSalesPrice"
-              }
-          ],
-          "returns": {
-              "type": "void"
-          }
-      },
-      {
-          "name": "updateSenderFundsItem",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              },
-              {
-                  "type": "bool",
-                  "name": "propertySold"
-              },
-              {
-                  "type": "bool",
-                  "name": "meetSalesCondition"
-              },
-              {
-                  "type": "bool",
-                  "name": "postDeadlineCheck"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "readItem",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "readFundsWithdrawnStatus",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "bool"
-          }
-      },
-      {
-          "name": "WithdrawFundsForReceiver",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "WithdrawFundsForSender",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      }
-  ],
-  "networks": {}
 }
 
 
@@ -142,16 +30,7 @@ const MyForm = () => {
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
-		peraWallet
-		  .reconnectSession()
-		  .then((accounts) => {
-			if (peraWallet.isConnected) {
-        setAccountAddress(accounts[0]);
-        document.getElementById("salesprice").value = 0
-			}
-	  
-		  })
-		  .catch((e) => console.log(e));
+		
 	  }, []);
 
 	const searchParams = useSearchParams()
@@ -169,12 +48,12 @@ const MyForm = () => {
 		var startdatetimestamp = Math.floor(Startby.getTime()/1000);
     var salesPrice = document.getElementById("salesprice").value;
 
-		const algodToken = '';
+		/*const algodToken = '';
 		const algodServer = 'https://testnet-api.algonode.cloud';
 		const algodPort = undefined;
 		const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
-		const suggestedParams = await algodClient.getTransactionParams().do();
+		const suggestedParams = await algodClient.getTransactionParams().do();*/
 
     salesPrice /= 1e6
 
@@ -218,6 +97,7 @@ const MyForm = () => {
   }
 	
 	const createbonusfunc = async () => {
+    /*
 		peraWallet
 		.reconnectSession()
 		.then((accounts) => {
@@ -228,25 +108,16 @@ const MyForm = () => {
 				login();
 			}
 		})
-		.catch((e) => console.log(e));
+		.catch((e) => console.log(e));*/
+
 	}
 
 	const login = async () => {
-		peraWallet
-			.connect()
-			.then((newAccounts) => {
-				peraWallet.connector.on("disconnect", disconnect);
-				setAccountAddress(newAccounts[0]);
-			})
-			.catch((error) => {
-			if (error?.data?.type !== "CONNECT_MODAL_CLOSED") {
-				console.log(error);
-			}
-		});
+		
 	}
 
 	const disconnect = async () => {
-		peraWallet.disconnect();
+		
 		setAccountAddress(null);
 	}
 
@@ -354,9 +225,9 @@ const MyForm = () => {
               ></textarea>
             </section>
     
-            {/* Amount Algo */}
+            {/* Amount USDC */}
             <label htmlFor="bonusamount" className="font-bold mr-4 m-2 text-black">
-              Amount (ALGO)
+              Amount (USDC)
             </label>
             <section className="flex mb-8">
               <input
@@ -464,7 +335,7 @@ const MyForm = () => {
     
             {/* Sales Price */}
             <label htmlFor="bonusamount" className="font-bold mt-4 m-2 text-black">
-              Sales Price greater than equals to:
+              Sales Price at or above:
             </label>
             <section className="flex mb-8">
               <input
