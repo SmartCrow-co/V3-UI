@@ -2,8 +2,7 @@
 import PopupInfo from '@/components/popupinfo';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-//import { PeraWalletConnect } from "@perawallet/connect";
-//import * as algosdk from 'algosdk'
+
 import _fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,13 +10,13 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Autocomplete from "react-google-autocomplete";
 const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
 const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
-const RENTCAST_KEY='6f4fb4d419054be682400744d4bf6d1f'
+const RENTCAST_KEY='a0913037a0254b40b51d63cb2de9453c'
 
 const axios = require('axios');
 const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
 
-const NFTcontract="0x9Bb2126BEC0e8c37976Ee6F1A635060cA0C42BF8";
+const NFTcontract="0x5771C86DA1f1cC114Cc2831a37182De41F1Fb972";
 const myabi=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"}],"name":"createSenderFund","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
 const {ethers} = require('ethers');
@@ -46,7 +45,7 @@ export default function Home() {
 
 	const getPropertyInfoRentCast = async(propertyID) => {
 		console.log('Getting Rentcast info');
-		const url = `https://api.rentcast.io/v1/properties/${encodeURIComponent(propertyID)}`;
+		const url = `https://api.rentcast.io/v1/properties?address=${encodeURIComponent(myaddress)}`;
 		const headers = { accept: 'application/json', 'X-Api-Key': RENTCAST_KEY };
 	  
 		try {
@@ -55,7 +54,7 @@ export default function Home() {
 	  
 		  if (json) {
 			console.log(json);
-			const APN = json.assessorID;
+			const APN = json[0].assessorID;
 			//const lastSalePrice = json.lastSalePrice;
 			return APN;
 		  } else {

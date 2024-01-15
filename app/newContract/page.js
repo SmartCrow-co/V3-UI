@@ -9,9 +9,12 @@ import PopupInfo from '@/components/popupinfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
-
-const myabi = {
-}
+const NFTcontract="0x5771C86DA1f1cC114Cc2831a37182De41F1Fb972";
+const myabi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"}],"name":"createSenderFund","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+const {ethers} = require('ethers');
+var provider;
+var MyContract;
+var MyContractwSigner;
 
 
 const MyForm = () => {
@@ -37,65 +40,45 @@ const MyForm = () => {
 	const searchParams = useSearchParams()
   const SelAPN = searchParams.get('SelAPN');
 	const Address = searchParams.get('Address');
+  const SenderAddress = searchParams.get('Sender');
+  const ReceiverAddress = searchParams.get('Receiver');
   const router = useRouter();
 
 	async function callBonus(account) {
 		var APN = document.getElementById("parcelid").value;
 		var amount = document.getElementById("bonusamount").value;
+    var seller = document.getElementById("senderwallet").value;
 		var realtor = document.getElementById("receiverwallet").value;
 		var Sellby = new Date(document.getElementById("sellbydate").value);
 		var selltimestamp = Math.floor(Sellby.getTime()/1000);
 		var Startby = new Date(document.getElementById("startdate").value);
 		var startdatetimestamp = Math.floor(Startby.getTime()/1000);
     var salesPrice = document.getElementById("salesprice").value;
+    var boolabove = PriceCondition;
+    var boolbelow = !PriceCondition;
 
-		/*const algodToken = '';
-		const algodServer = 'https://testnet-api.algonode.cloud';
-		const algodPort = undefined;
-		const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
-
-		const suggestedParams = await algodClient.getTransactionParams().do();*/
 
     salesPrice /= 1e6
 
-		const contract = new algosdk.ABIContract(myabi);
-		const atc = new algosdk.AtomicTransactionComposer();
+    provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    console.log(signer.address);
+      
 
-    // Create a payment transaction object with the sender, receiver, amount, and other parameters
-    const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: account,
-      suggestedParams: suggestedParams,
-      to: algosdk.getApplicationAddress(469360340),
-      amount: amount * 1e6,
-    });
+    MyContract = new ethers.Contract(NFTcontract, myabi, signer);
+    console.log(MyContract);
+    //MyContractwSigner = await MyContract.connect(signer);
+
     
-    atc.addMethodCall({
-        appID: 469360340,
-        method: algosdk.getMethodByName(contract.methods, 'createFundsInfo'),
-        sender: account,
-        suggestedParams,
-        signer,
-        methodArgs: [{ txn: paymentTxn, signer }, APN, realtor, startdatetimestamp, selltimestamp, isForSale, salesPrice * 1e6], // change to APN in production
-        boxes: [
-          {
-            appIndex: 469360340,
-            name: new Uint8Array(Buffer.from(APN)) // change to APN in production
-          }
-        ],
-    });
     
-		const results = await atc.execute(algodClient, 3);
-		console.log(`Contract created ` + results.methodResults[0].returnValue);
+    
+		const results = await MyContract.createSenderFund(realtor,APN,startdatetimestamp,selltimestamp,boolabove,boolbelow,salesPrice);
+		console.log(`Contract created ` + results);
 		setPopupHeaderSuccess('Contract Initiated!');
 		setShowPopupSuccess(true);
 	}
 
-  async function signer(unsignedTxns) {
-    const signerTransactions = unsignedTxns.map(txn => {
-      return {txn, signers: [algosdk.encodeAddress(txn.from.publicKey)]}
-    })
-    return await peraWallet.signTransaction([signerTransactions])
-  }
+
 	
 	const createbonusfunc = async () => {
     /*
@@ -110,7 +93,7 @@ const MyForm = () => {
 			}
 		})
 		.catch((e) => console.log(e));*/
-
+    await callBonus();
 	}
 
 	const login = async () => {
@@ -166,6 +149,7 @@ const MyForm = () => {
       };
 
 	  const handleChange = async() => {
+      console.log('Verifying input');
       const verAmount= document.getElementById("bonusamount").value;
       const verStartdate= document.getElementById("startdate").value;
       const verSellbydate= document.getElementById("sellbydate").value;
@@ -397,7 +381,7 @@ const MyForm = () => {
               <input
                 type="text"
                 id="senderwallet"
-                placeholder='1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+                placeholder={SenderAddress}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
               />
@@ -416,7 +400,7 @@ const MyForm = () => {
               <input
                 type="text"
                 id="receiverwallet"
-                placeholder='1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+                placeholder={ReceiverAddress}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
               />
