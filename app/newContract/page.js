@@ -26,6 +26,7 @@ const MyForm = () => {
 	const [balloonText,setBalloonText] = useState("");
 	const [accountAddress, setAccountAddress] = useState(null);
   const [isForSale, setIsForSale] = useState(true);
+  const [PriceCondition, setPriceCondition] = useState(true);
   const isConnectedToPeraWallet = !!accountAddress;
 
 	useEffect(() => {
@@ -332,10 +333,44 @@ const MyForm = () => {
                 </label>
               </div>
             </div>
-    
+            {/* sales condition*/}
+            <label htmlFor="bonuscondition" className="font-bold m-2 text-black">Sales price condition: </label>
+            <div className="flex items-center flex-row p-2">
+              <div className="flex items-center">
+                <label className="mr-10 m-2">
+                  <input
+                    type="radio"
+                    id="priceabove"
+                    checked={PriceCondition}
+                    onChange={() => {
+                      setPriceCondition(true);
+                      handleChange();
+                      console.log("handle change price condition 2");
+                    }}
+                    className="mr-1"
+                  />
+                  Equal or Above
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    id="no"
+                    checked={!PriceCondition}
+                    onChange={() => {
+                      setPriceCondition(false);
+                      //document.getElementById("salesprice").value = 0;
+                      handleChange();
+                      console.log("handle change price condition");
+                    }}
+                    className="mr-1"
+                  />
+                  Equal or Below
+                </label>
+              </div>
+            </div>
             {/* Sales Price */}
             <label htmlFor="bonusamount" className="font-bold mt-4 m-2 text-black">
-              Sales Price at or above:
+              Sales Price :
             </label>
             <section className="flex mb-8">
               <input

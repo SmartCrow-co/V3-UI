@@ -16,285 +16,9 @@ const RENTCAST_KEY='6f4fb4d419054be682400744d4bf6d1f'
 const axios = require('axios');
 const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
+
 const NFTcontract="0x9Bb2126BEC0e8c37976Ee6F1A635060cA0C42BF8";
-const myabi=[
-	
-		{
-		  "inputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "constructor"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "owner",
-			  "type": "address"
-			}
-		  ],
-		  "name": "OwnableInvalidOwner",
-		  "type": "error"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "account",
-			  "type": "address"
-			}
-		  ],
-		  "name": "OwnableUnauthorizedAccount",
-		  "type": "error"
-		},
-		{
-		  "anonymous": false,
-		  "inputs": [
-			{
-			  "indexed": true,
-			  "internalType": "address",
-			  "name": "previousOwner",
-			  "type": "address"
-			},
-			{
-			  "indexed": true,
-			  "internalType": "address",
-			  "name": "newOwner",
-			  "type": "address"
-			}
-		  ],
-		  "name": "OwnershipTransferred",
-		  "type": "event"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "",
-			  "type": "address"
-			},
-			{
-			  "internalType": "address",
-			  "name": "",
-			  "type": "address"
-			},
-			{
-			  "internalType": "string",
-			  "name": "",
-			  "type": "string"
-			}
-		  ],
-		  "name": "bonusInfo",
-		  "outputs": [
-			{
-			  "internalType": "address",
-			  "name": "Sender",
-			  "type": "address"
-			},
-			{
-			  "internalType": "address",
-			  "name": "Receiver",
-			  "type": "address"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "bonusAmount",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "startDate",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "sellByDate",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "propertySold",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "haveExpectedSalesPrice",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "expectedSalesPrice",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "meetSalesCondition",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "postDeadlineCheck",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "fundsWithdrawn",
-			  "type": "bool"
-			}
-		  ],
-		  "stateMutability": "view",
-		  "type": "function"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "Receiver",
-			  "type": "address"
-			},
-			{
-			  "internalType": "string",
-			  "name": "propertyNumber",
-			  "type": "string"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "startDateInDays",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "sellByDateInDays",
-			  "type": "uint256"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "haveExpectedSalesPrice",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "uint256",
-			  "name": "expectedSalesPrice",
-			  "type": "uint256"
-			}
-		  ],
-		  "name": "createSenderFund",
-		  "outputs": [],
-		  "stateMutability": "payable",
-		  "type": "function"
-		},
-		{
-		  "inputs": [],
-		  "name": "owner",
-		  "outputs": [
-			{
-			  "internalType": "address",
-			  "name": "",
-			  "type": "address"
-			}
-		  ],
-		  "stateMutability": "view",
-		  "type": "function"
-		},
-		{
-		  "inputs": [],
-		  "name": "renounceOwnership",
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "function"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "newOwner",
-			  "type": "address"
-			}
-		  ],
-		  "name": "transferOwnership",
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "function"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "sender",
-			  "type": "address"
-			},
-			{
-			  "internalType": "address",
-			  "name": "receiver",
-			  "type": "address"
-			},
-			{
-			  "internalType": "string",
-			  "name": "propertyNumber",
-			  "type": "string"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "propertySold",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "meetSalesCondition",
-			  "type": "bool"
-			},
-			{
-			  "internalType": "bool",
-			  "name": "postDeadlineCheck",
-			  "type": "bool"
-			}
-		  ],
-		  "name": "updateBonusInfo",
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "function"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "Receiver",
-			  "type": "address"
-			},
-			{
-			  "internalType": "string",
-			  "name": "propertyNumber",
-			  "type": "string"
-			}
-		  ],
-		  "name": "withdrawFundsReceiver",
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "function"
-		},
-		{
-		  "inputs": [
-			{
-			  "internalType": "address",
-			  "name": "Receiver",
-			  "type": "address"
-			},
-			{
-			  "internalType": "string",
-			  "name": "propertyNumber",
-			  "type": "string"
-			}
-		  ],
-		  "name": "withdrawFundsSender",
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "type": "function"
-		},
-		{
-		  "stateMutability": "payable",
-		  "type": "receive"
-		}
-	  
-  ];
+const myabi=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"}],"name":"createSenderFund","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
 const {ethers} = require('ethers');
 var provider;
@@ -319,6 +43,28 @@ export default function Home() {
 		// Reconnect to the session when the component is mounted
 		
 	}, []);
+
+	const getPropertyInfoRentCast = async(propertyID) => {
+		console.log('Getting Rentcast info');
+		const url = `https://api.rentcast.io/v1/properties/${encodeURIComponent(propertyID)}`;
+		const headers = { accept: 'application/json', 'X-Api-Key': RENTCAST_KEY };
+	  
+		try {
+		  const response = await axios.get(url, { headers });
+		  const json = response.data;
+	  
+		  if (json) {
+			console.log(json);
+			const APN = json.assessorID;
+			//const lastSalePrice = json.lastSalePrice;
+			return APN;
+		  } else {
+			throw new Error('No property found for the given ID');
+		  }
+		} catch (error) {
+		  throw new Error('Error fetching property information: ' + error.message);
+		}
+	  }
 
 	const getPropertyDetails = async(
 		accessToken, 
@@ -462,13 +208,17 @@ export default function Home() {
 	const handleExistingContract = async() => {
 		var data = document.getElementById("myAPNInput").value;
 		const data2 = document.getElementById("addresscheck").value;
-		router.push(`/existingContract?SelAPN=${data}&Address=${data2}`);
+		const data3 = document.getElementById("mysenderwallet").value;
+		const data4 = document.getElementById("myreceiverwallet").value;
+		router.push(`/existingContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);
 	};
 
 	const handleNewContract = async() => {
 		var data = myaddress;
 		const data2 = document.getElementById("addresscheck").value;
-		router.push(`/newContract?SelAPN=${data}&Address=${data2}`);
+		const data3 = document.getElementById("mysenderwallet").value;
+		const data4 = document.getElementById("myreceiverwallet").value;
+		router.push(`/newContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);
 	};
 	
 	const handleSelect = async(place) => {
@@ -488,8 +238,8 @@ export default function Home() {
 		console.log('zip = '+zipcode);
 		var myorder = streetaddress+'_'+zipcode;
 		var response = await checkAPN();
-		//var myAPN = await getPropertyDetails(PROPERTY_API_KEY,streetaddress,zipcode,myorder);
-		//console.log(myAPN);
+		var myAPN = await getPropertyInfoRentCast(myaddress);
+		console.log(myAPN);
 
 		/*
 		var myAPN = document.getElementById("myAPNInput").value;
