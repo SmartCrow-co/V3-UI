@@ -222,8 +222,8 @@ export default function Home() {
 	
 	const handleSelect = async(place) => {
 		console.log(place);
-		setStreetaddress(place['address_components'][1]['long_name']);
-		setZipcode(place['address_components'][7]['long_name']);
+		//setStreetaddress(place['address_components'][1]['long_name']);
+		//setZipcode(place['address_components'][7]['long_name']);
 		//console.log(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
 		//setMyaddress(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
 		console.log(place['formatted_address']);
@@ -239,6 +239,13 @@ export default function Home() {
 		var response = await checkAPN();
 		var myAPN = await getPropertyInfoRentCast(myaddress);
 		console.log(myAPN);
+		console.log(typeof myAPN);
+		const myText = document.getElementById("addresscheck");
+		var APNtext = 'no APN known';
+		if (typeof myAPN!='undefined'){
+			APNtext = myAPN;
+		}
+		myText.value = myaddress+'\n APN : '+APNtext;
 
 		/*
 		var myAPN = document.getElementById("myAPNInput").value;

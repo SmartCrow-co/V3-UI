@@ -381,7 +381,7 @@ const MyForm = () => {
               <input
                 type="text"
                 id="senderwallet"
-                placeholder={SenderAddress}
+                defaultValue={SenderAddress}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
               />
@@ -400,7 +400,7 @@ const MyForm = () => {
               <input
                 type="text"
                 id="receiverwallet"
-                placeholder={ReceiverAddress}
+                defaultValue={ReceiverAddress}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
               />

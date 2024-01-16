@@ -27,7 +27,7 @@ const PopupInfo = ({text, closeModal, isOpen}) => {
       {/* Header text */}
       <h1 className="text-h text-gray-700 font-bold flex justify-center">Follow Below Instructions</h1>
       <div>
-      <ReactSVG src="/assets/images/moreinfo.svg" className="mb-5" />
+      {/*<ReactSVG src="/assets/images/moreinfo.svg" className="mb-5" />*/}
       <h3 className="text-m text-gray-700 m-2">{text}</h3>
       </div>
     </div>
