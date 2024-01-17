@@ -247,47 +247,7 @@ export default function Home() {
 		}
 		myText.value = myaddress+'\n APN : '+APNtext;
 
-		/*
-		var myAPN = document.getElementById("myAPNInput").value;
-		dotenv.config()
-		const API_KEY = process.env.NEXT_PUBLIC_API_KEY
-		if (myAPN != "") {
-			const url = `https://api.rentcast.io/v1/properties/${encodeURIComponent(myAPN)}`;
-
-			try {
-				const response = await _fetch(url, {
-				method: 'GET',
-				headers: {
-					accept: 'application/json',
-					'X-Api-Key': API_KEY,
-				},
-			});
 		
-			if (response.ok) {
-				const json = await response.json();
-				const myText = document.getElementById("addresscheck");
-				myText.value = json.addressLine1;
-				console.log(json)
-				const lastSaleDate = json.lastSaleDate;
-				const lastSalePrice = json.lastSalePrice;
-				console.log(lastSaleDate);
-				console.log(lastSalePrice)
-				localStorage.setItem("lastSaleDate", lastSaleDate);
-				localStorage.setItem("lastSalePrice", lastSalePrice);
-				checkAPN(myAPN);
-			} else {
-				setBalloonText('No property found for the given ID');
-				setShowBalloon(true);
-				console.log('No property found for the given ID');
-			}
-			} catch (error) {
-				console.log('Error fetching property information: ' + error.message);
-			}
-		}
-		else {
-			setBalloonText('Please enter an APN');
-			setShowBalloon(true);
-		}*/
 		
 	} 
 
@@ -295,9 +255,7 @@ export default function Home() {
 		<section className='contract-wrapper'>
 		  <div className='mb-2 pb-20 container flex space-between flex-end'>
 			<div className='flex-col flex-start pt-4 pb-0 contract-left'>
-			  
-			  <section className="flex mb-8">
-			  <input
+			<input
 				  type="text"
 				  id="mysenderwallet"
 				  className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
@@ -311,6 +269,9 @@ export default function Home() {
 				  placeholder="Enter Receiver Wallet Address"
 				  required
 			/>
+			  <section className="flex mb-8">
+				
+			 
 			  <Autocomplete
                 
                 apiKey={GOOGLE_API_KEY}
@@ -331,6 +292,7 @@ export default function Home() {
                     handleSelect(place);
                 }}
             />
+			
 				{/*<input
 				  type="text"
 				  id="myAPNInput"

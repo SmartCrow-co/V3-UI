@@ -20,7 +20,16 @@ var MyContractwSigner;
 
 async function callContract(senderwallet, receiverwallet, APN) {
 	//console.log('suggestedParams:', suggestedParams);
-  console.log(account)
+  //console.log(account)
+  provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  console.log(signer.address);
+      
+
+  MyContract = new ethers.Contract(NFTcontract, myabi, provider);
+
+  const resultsArray = await MyContract.bonusInfo(senderwallet,receiverwallet,APN);
+  console.log(resultsArray);
 
   console.log(`Contract read success `);
 	return resultsArray
@@ -87,9 +96,9 @@ const MyPage = () => {
   const searchParams = useSearchParams()
   const router = useRouter();
   const APN = searchParams.get('SelAPN');
-	console.log('APN = '+APN);
+	//console.log('APN = '+APN);
 	const Address = searchParams.get('Address');
-  console.log('Address = '+Address);
+ // console.log('Address = '+Address);
   const SenderAddress = searchParams.get('Sender');
   const ReceiverAddress = searchParams.get('Receiver');
 
@@ -108,6 +117,9 @@ const MyPage = () => {
 
   async function updateContractInfoSeller(senderwallet, receiverwallet, APN){
     const apiUrl = 'https://smartcrow-backend-mumbai.onrender.com/api/update-contract'; 
+    console.log('sender: '+senderwallet);
+    console.log('receiver: '+receiverwallet);
+    console.log('APN: '+APN);
   
     // Example data to send in the request body
     const requestData = {
@@ -186,16 +198,7 @@ const MyPage = () => {
   }
 
   const refresh = async () => {
-    console.log(accountAddress)
-		/*peraWallet
-			.reconnectSession()
-			.then((accounts) => {
-				if (peraWallet.isConnected) {
-          setAccountAddress(accounts[0])
-					handleUpdate();
-				}
-			})
-			.catch((e) => console.log(e));*/
+    await handleUpdate();
 	}
 
     const handleClosePopup = () => {
@@ -207,42 +210,43 @@ const MyPage = () => {
       };
 
     const handleWithdrawRealtor = async() => {
-      await updateContractInfoReceiver(469360340, APN);
+      await updateContractInfoReceiver(SenderAddress,ReceiverAddress, APN);
       setFetch(true)
     }
 
     const handleWithdrawSeller = async() => {
-      await updateContractInfoSeller(469360340, APN);
+      await updateContractInfoSeller(SenderAddress,ReceiverAddress, APN);
       setFetch(true)
     }
 
   const handleUpdate = async() =>{
-      var resultarray = await callContract(APN, accountAddress)
+      var resultarray = await callContract(SenderAddress, ReceiverAddress, APN)
 
-      setSeller(resultarray[1]);
-      setRealtor(resultarray[2]);
-      setAmount(Number(resultarray[3]) / 1e6);
-      var resultdate = new Date(Number(resultarray[4])*1000);
-      startdate = new Date(resultdate.getTime()+36000000);
-      resultarray[4]=startdate;
-      var startdate = resultarray[4].toLocaleString(undefined, {
+      setSeller(resultarray[0]);
+      setRealtor(resultarray[1]);
+      setAmount(Number(resultarray[2]));// / 1e6);
+      var resultdate = new Date(Number(resultarray[3])*1000);
+      var startdate = new Date(resultdate.getTime()+36000000);
+      var tempstartdate = startdate;
+      //resultarray[4]=startdate;
+      var startdate2 = tempstartdate.toLocaleString(undefined, {
         month: "long",
         day: "numeric",
         year: "numeric",
       });
-      setStartdate(startdate);
+      setStartdate(startdate2);
 
-      var resultdate2 = new Date(Number(resultarray[5])*1000);
-      sellbydate = new Date(resultdate2.getTime()+36000000);
-      resultarray[5]=sellbydate;
-      var sellbydate = resultarray[5].toLocaleString(undefined, {
+      var resultdate2 = new Date(Number(resultarray[4])*1000);
+      var sellbydate = new Date(resultdate2.getTime()+36000000);
+      //resultarray[5]=sellbydate;
+      var sellbydate2 = sellbydate.toLocaleString(undefined, {
         month: "long",
         day: "numeric",
         year: "numeric",
       });
-      setSellbydate(sellbydate);
+      setSellbydate(sellbydate2);
 
-      var salesPrice = resultarray[8];
+      var salesPrice = resultarray[7];
       setSalesPrice(Number(salesPrice));
 
       var activeflag = resultarray[10];
@@ -260,7 +264,7 @@ const MyPage = () => {
         <div className="flex flex-col gap-4">
           <div className='container flex flex-row'>
             <div className='left-side'>
-              <h2 className="text-black text-2xl font-bold">APN Address:</h2>
+              <h2 className="text-black text-2xl font-bold">APN/ID Address:</h2>
             </div>
             <div className='right-side ml-auto'>
               <button 
@@ -287,7 +291,7 @@ const MyPage = () => {
                 <ul className="list-inside text-black">
                   <li>Amount <span className='text-default-text'>(USDC)</span>:</li>
                   <li>Start date:</li>
-                  <li>Sold by:</li>
+                  <li>Sell by:</li>
                   <li>Sender Wallet:</li>
                   <li>Receiver Wallet:</li>
                   <li>Still Active:</li>
