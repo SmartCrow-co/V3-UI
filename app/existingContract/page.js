@@ -2,238 +2,61 @@
 import { useState, useEffect } from 'react';
 import Popup from '@/components/popup';
 import PopupSuccess from '@/components/popupsuccess';
-import { PeraWalletConnect } from "@perawallet/connect";
+
 import { useSearchParams, useRouter } from 'next/navigation';
-import * as algosdk from 'algosdk'
+
 import axios from "axios"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
-const peraWallet = new PeraWalletConnect();
-const myabi = {
-  "name": "Sender Funds Contract with Beaker",
-  "methods": [
-      {
-          "name": "createFundsInfo",
-          "args": [
-              {
-                  "type": "pay",
-                  "name": "pay"
-              },
-              {
-                  "type": "string",
-                  "name": "propertyNumber"
-              },
-              {
-                  "type": "address",
-                  "name": "Receiver"
-              },
-              {
-                  "type": "uint64",
-                  "name": "startDate"
-              },
-              {
-                  "type": "uint64",
-                  "name": "endDate"
-              },
-              {
-                  "type": "bool",
-                  "name": "haveExpectedSalesPrice"
-              },
-              {
-                  "type": "uint64",
-                  "name": "expectedSalesPrice"
-              }
-          ],
-          "returns": {
-              "type": "void"
-          }
-      },
-      {
-          "name": "updateSenderFundsItem",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              },
-              {
-                  "type": "bool",
-                  "name": "propertySold"
-              },
-              {
-                  "type": "bool",
-                  "name": "meetSalesCondition"
-              },
-              {
-                  "type": "bool",
-                  "name": "postDeadlineCheck"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "readItem",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "readFundsWithdrawnStatus",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "bool"
-          }
-      },
-      {
-          "name": "WithdrawFundsForReceiver",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      },
-      {
-          "name": "WithdrawFundsForSender",
-          "args": [
-              {
-                  "type": "string",
-                  "name": "item_name"
-              }
-          ],
-          "returns": {
-              "type": "(string,address,address,uint64,uint64,uint64,bool,bool,uint64,bool,bool,bool)"
-          }
-      }
-  ],
-  "networks": {}
-}
+
+const NFTcontract="0x5771C86DA1f1cC114Cc2831a37182De41F1Fb972";
+const myabi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"}],"name":"createSenderFund","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+const {ethers} = require('ethers');
+var provider;
+var MyContract;
+var MyContractwSigner;
 
 
 async function callContract(APN, account) {
-	const algodToken = '';
-	const algodServer = 'https://testnet-api.algonode.cloud';
-	const algodPort = undefined;
-	const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
-
-	const suggestedParams = await algodClient.getTransactionParams().do();
-  console.log('suggestedParams:', suggestedParams);
-
-	const contract = new algosdk.ABIContract(myabi);
-	const atc = new algosdk.AtomicTransactionComposer();
-
+	//console.log('suggestedParams:', suggestedParams);
   console.log(account)
 
-	atc.addMethodCall({
-		appID: 469360340,
-		method: algosdk.getMethodByName(contract.methods, 'readItem'),
-		sender: account,
-		suggestedParams,
-		signer: async (unsignedTxns) => {
-			const txnGroups = unsignedTxns.map((t) => ({txn: t, signers: [t.from]}));
-			return await peraWallet.signTransaction([txnGroups]);
-		},
-		methodArgs: [APN],
-		boxes: [
-			{
-				appIndex: 469360340,
-				name: new Uint8Array(Buffer.from(APN))
-			}
-		],
-	});
-
-	const results = await atc.execute(algodClient, 3);
-  const resultsArray = results.methodResults[0].returnValue
-  console.log(`Contract read success ` + results.methodResults[0].returnValue);
+  console.log(`Contract read success `);
 	return resultsArray
 }
 
 async function withdrawSenderPera(APN, account) {
-	const algodToken = '';
-	const algodServer = 'https://testnet-api.algonode.cloud';
-	const algodPort = undefined;
-	const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+  provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  console.log(signer.address);
+    
 
-	const suggestedParams = await algodClient.getTransactionParams().do();
-  console.log('suggestedParams:', suggestedParams);
+  MyContract = new ethers.Contract(NFTcontract, myabi, signer);
+  console.log(MyContract);
 
-	const contract = new algosdk.ABIContract(myabi);
-	const atc = new algosdk.AtomicTransactionComposer();
-
-	atc.addMethodCall({
-		appID: 469360340,
-		method: algosdk.getMethodByName(contract.methods, 'WithdrawFundsForSender'),
-		sender: account,
-		suggestedParams,
-		signer: async (unsignedTxns) => {
-			const txnGroups = unsignedTxns.map((t) => ({txn: t, signers: [t.from]}));
-			return await peraWallet.signTransaction([txnGroups]);
-		},
-		methodArgs: [APN],
-		boxes: [
-			{
-				appIndex: 469360340,
-				name: new Uint8Array(Buffer.from(APN))
-			}
-		],
-	});
-
-	const results = await atc.execute(algodClient, 3);
-  const resultsArray = results.methodResults[0].returnValue
-  console.log(`Contract read success ` + results.methodResults[0].returnValue);
-	return resultsArray
+  const result = await MyContract.withdrawFundsSender(account,APN);
+  
+  console.log(result);
+  
+	return result
 }
 
 async function withdrawReceiverPera(APN, account) {
-	const algodToken = '';
-	const algodServer = 'https://testnet-api.algonode.cloud';
-	const algodPort = undefined;
-	const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+  
+  provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  console.log(signer.address);
+    
 
-	const suggestedParams = await algodClient.getTransactionParams().do();
-  	console.log('suggestedParams:', suggestedParams);
+  MyContract = new ethers.Contract(NFTcontract, myabi, signer);
+  console.log(MyContract);
 
-	const contract = new algosdk.ABIContract(myabi);
-	const atc = new algosdk.AtomicTransactionComposer();
+  const result = await MyContract.withdrawFundsReceiver(account,APN);
+  
+  console.log(result);
 
-	atc.addMethodCall({
-		appID: 469360340,
-		method: algosdk.getMethodByName(contract.methods, 'WithdrawFundsForReceiver'),
-		sender: account,
-		suggestedParams,
-		signer: async (unsignedTxns) => {
-			const txnGroups = unsignedTxns.map((t) => ({txn: t, signers: [t.from]}));
-			return await peraWallet.signTransaction([txnGroups]);
-		},
-		methodArgs: [APN], 
-		boxes: [
-			{
-				appIndex: 469360340,
-				name: new Uint8Array(Buffer.from(APN))
-			}
-		],
-	});
-
-	const results = await atc.execute(algodClient, 3);
-  const resultsArray = results.methodResults[0].returnValue
-  console.log(`Contract read success ` + results.methodResults[0].returnValue);
-	return resultsArray
+	return result
 }
 
 
@@ -267,9 +90,11 @@ const MyPage = () => {
 	console.log('APN = '+APN);
 	const Address = searchParams.get('Address');
   console.log('Address = '+Address);
+  const SenderAddress = searchParams.get('Sender');
+  const ReceiverAddress = searchParams.get('Receiver');
 
   useEffect(() => {
-		peraWallet
+		/*peraWallet
 			.reconnectSession()
 			.then((accounts) => {
 				if (peraWallet.isConnected) {
@@ -277,16 +102,17 @@ const MyPage = () => {
 				}
 			
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.log(e));*/
 	}, []);
 	
 
-  async function updateContractInfoSeller(appID, APN){
-    const apiUrl = 'https://smartcrow-oracle-testnet.onrender.com/update-contract'; 
+  async function updateContractInfoSeller(senderwallet, receiverwallet, APN){
+    const apiUrl = 'https://smartcrow-backend-mumbai.onrender.com/api/update-contract'; 
   
     // Example data to send in the request body
     const requestData = {
-      appIndex: appID,
+      sender: senderwallet,
+      receiver: receiverwallet,
       propertyNumber: APN,
     };
   
@@ -301,7 +127,7 @@ const MyPage = () => {
       // Handle the successful response
       console.log('Response:', response.data);
       if (response.data["meetSalesCondition"].condition == false && response.data["postDeadlineCheck"] == true) {
-        await withdrawSenderPera(APN, accountAddress)
+        await withdrawSenderPera(APN, senderwallet)
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
         setFetch(false)
@@ -320,12 +146,13 @@ const MyPage = () => {
     });
   }
   
-  async function updateContractInfoReceiver(appID, APN){
-    const apiUrl = 'https://smartcrow-oracle-testnet.onrender.com/update-contract'; 
+  async function updateContractInfoReceiver(senderwallet, receiverwallet, APN){
+    const apiUrl = 'https://smartcrow-backend-mumbai.onrender.com/api/update-contract'; 
   
     // Example data to send in the request body
     const requestData = {
-      appIndex: appID,
+      sender: senderwallet,
+      receiver: receiverwallet,
       propertyNumber: APN,
     };
   
@@ -340,7 +167,7 @@ const MyPage = () => {
       // Handle the successful response
       console.log('Response:', response.data);
       if (response.data["meetSalesCondition"].condition) {
-        await withdrawReceiverPera(APN, accountAddress)
+        await withdrawReceiverPera(APN, receiverwallet)
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
         setFetch(false)
@@ -360,7 +187,7 @@ const MyPage = () => {
 
   const refresh = async () => {
     console.log(accountAddress)
-		peraWallet
+		/*peraWallet
 			.reconnectSession()
 			.then((accounts) => {
 				if (peraWallet.isConnected) {
@@ -368,7 +195,7 @@ const MyPage = () => {
 					handleUpdate();
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.log(e));*/
 	}
 
     const handleClosePopup = () => {
