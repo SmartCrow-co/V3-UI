@@ -205,8 +205,8 @@ export default function Home() {
 	}
 
 	const handleExistingContract = async() => {
-		var data = document.getElementById("myAPNInput").value;
-		const data2 = document.getElementById("addresscheck").value;
+		var data = myaddress;
+		const data2 = myaddress;
 		const data3 = document.getElementById("mysenderwallet").value;
 		const data4 = document.getElementById("myreceiverwallet").value;
 		router.push(`/existingContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);
@@ -214,7 +214,7 @@ export default function Home() {
 
 	const handleNewContract = async() => {
 		var data = myaddress;
-		const data2 = document.getElementById("addresscheck").value;
+		const data2 = myaddress;
 		const data3 = document.getElementById("mysenderwallet").value;
 		const data4 = document.getElementById("myreceiverwallet").value;
 		router.push(`/newContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);

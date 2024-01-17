@@ -18,7 +18,7 @@ var MyContract;
 var MyContractwSigner;
 
 
-async function callContract(APN, account) {
+async function callContract(senderwallet, receiverwallet, APN) {
 	//console.log('suggestedParams:', suggestedParams);
   console.log(account)
 
@@ -285,7 +285,7 @@ const MyPage = () => {
             <div className="flex rounded px-2 py-2">
               <div className="w-1/2">
                 <ul className="list-inside text-black">
-                  <li>Amount <span className='text-default-text'>(Algos)</span>:</li>
+                  <li>Amount <span className='text-default-text'>(USDC)</span>:</li>
                   <li>Start date:</li>
                   <li>Sold by:</li>
                   <li>Sender Wallet:</li>
