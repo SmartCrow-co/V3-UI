@@ -97,7 +97,7 @@ const MyPage = () => {
   const router = useRouter();
   const APN = searchParams.get('SelAPN');
 	//console.log('APN = '+APN);
-	const Address = searchParams.get('Address');
+	const Address = searchParams.get('Address')+'\n APN : '&searchParams.get('fetchedAPN');;
  // console.log('Address = '+Address);
   const SenderAddress = searchParams.get('Sender');
   const ReceiverAddress = searchParams.get('Receiver');

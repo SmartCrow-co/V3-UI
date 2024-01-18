@@ -37,6 +37,7 @@ export default function Home() {
 	const [myaddress,setMyaddress] = useState('');
 	const [streetaddress, setStreetaddress]=useState('');
 	const [zipcode, setZipcode]=useState(0);
+	const [fetchedAPN,setFetchedAPN] = useState('');
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -209,7 +210,8 @@ export default function Home() {
 		const data2 = myaddress;
 		const data3 = document.getElementById("mysenderwallet").value;
 		const data4 = document.getElementById("myreceiverwallet").value;
-		router.push(`/existingContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);
+		const data5 = fetchedAPN;
+		router.push(`/existingContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}&fetchedAPN=${data5}`);
 	};
 
 	const handleNewContract = async() => {
@@ -217,7 +219,8 @@ export default function Home() {
 		const data2 = myaddress;
 		const data3 = document.getElementById("mysenderwallet").value;
 		const data4 = document.getElementById("myreceiverwallet").value;
-		router.push(`/newContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}`);
+		const data5 = fetchedAPN;
+		router.push(`/newContract?SelAPN=${data}&Address=${data2}&Sender=${data3}&Receiver=${data4}&fetchedAPN=${data5}`);
 	};
 	
 	const handleSelect = async(place) => {
@@ -245,6 +248,7 @@ export default function Home() {
 		if (typeof myAPN!='undefined'){
 			APNtext = myAPN;
 		}
+		setFetchedAPN(APNtext);
 		myText.value = myaddress+'\n APN : '+APNtext;
 
 		

@@ -39,7 +39,7 @@ const MyForm = () => {
 
 	const searchParams = useSearchParams()
   const SelAPN = searchParams.get('SelAPN');
-	const Address = searchParams.get('Address');
+	const Address = searchParams.get('Address')+'\n APN : '&searchParams.get('fetchedAPN');
   const SenderAddress = searchParams.get('Sender');
   const ReceiverAddress = searchParams.get('Receiver');
   const router = useRouter();
