@@ -8,6 +8,9 @@ import PopupInfo from '@/components/popupinfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
+
+const axios = require('axios');
+
 //stable coin contracts
 
 const USDTcontract = "0x79C950C7446B234a6Ad53B908fBF342b01c4d446";
@@ -35,6 +38,8 @@ const MyForm = () => {
   const [isForSale, setIsForSale] = useState(true);
   const [PriceCondition, setPriceCondition] = useState(true);
   const isConnectedToPeraWallet = !!accountAddress;
+  const [sendermail,setSendermail]= useState('');
+  const [receiverermail,setReceivermail]= useState('');
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -58,6 +63,34 @@ const MyForm = () => {
     const MyUSDTContract = new ethers.Contract(USDTcontract, USDTabi, signer);
     var result = await(MyUSDTContract.approve(NFTcontract,myamount));
     console.log(result);
+
+
+  }
+
+  const sendconfirmationmail = async(mailaddress) => {
+    const apiUrl = 'https://smartcrow-backend-goerli.onrender.com/api/send-email'; 
+    console.log('mail address = '+mailaddress);
+    const senderwallet = document.getElementById('senderwallet').value;
+    const receiverwallet = document.getElementById('receiverwallet').value;
+    var mymessage = 'Created a bonus contract with sender wallet '+senderwallet+' and receiver wallet '+receiverwallet+' for address '+SelAPN;
+  
+    // Example data to send in the request body
+    const requestData = {
+      email: mailaddress,
+      message: mymessage,
+
+    };
+  
+    // Set the headers for JSON data
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+  
+    // Make a POST request using Axios
+    axios.post(apiUrl, requestData, { headers })
+    .then(async response => {
+      console.log(response);
+    })
 
 
   }
@@ -98,6 +131,17 @@ const MyForm = () => {
     
     
 		const results = await MyContract.createBonusInfo(realtor,APN,startdatetimestamp,selltimestamp,boolabove,boolbelow,salesPrice,bonusamount,USDTcontract);
+    const sendermail = document.getElementById('sendermail').value;
+    const receivermail = document.getElementById('receivermail').value;
+
+    if (sendermail!=''){
+      await sendconfirmationmail(sendermail);
+    }
+
+    if (receivermail!=''){
+      await sendconfirmationmail(receivermail);
+    }
+
 		console.log(`Contract created ` + results);
 		setPopupHeaderSuccess('Contract Initiated!');
 		setShowPopupSuccess(true);
@@ -144,7 +188,7 @@ const MyForm = () => {
 	  }
 
 	  const handleClickBalloon4 = () => {
-		setBalloonText('This is the sender wallet address. This wallet address will fund the contract via PeraWallet.');
+		setBalloonText('This is the sender wallet address. This wallet address will fund the contract via Metamask.');
 		setShowBalloon(true);
 	  }
 
@@ -170,6 +214,7 @@ const MyForm = () => {
       const verSeller = document.getElementById("senderwallet").value;
       const verRealtor = document.getElementById("receiverwallet").value;
       const salesPrice = document.getElementById("salesprice").value;
+
 
       if (isForSale) {
         if (verAmount==0 || verStartdate=="" || verSellbydate=="" ||verSeller=="" || verRealtor=="" || salesPrice=="" || verSeller==verRealtor) {
@@ -391,7 +436,7 @@ const MyForm = () => {
     
             {/* Sender Wallet */}
             <label htmlFor="senderwallet" className="font-bold mr-4 m-2 text-black">Sender Wallet</label>
-            <section className="flex mb-8">
+            <section className="flex mb-2">
               <input
                 type="text"
                 id="senderwallet"
@@ -407,10 +452,15 @@ const MyForm = () => {
                 <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#ffffff", fontSize: '12px' }} className='m-2 py-0' />
               </button>
             </section>
+            <section className="flex mb-8">
+              <input id="sendermail" type="email" placeholder="johndoe@mail.com" className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
+                >
+              </input>
+            </section>
     
             {/* Receiver Wallet */}
             <label htmlFor="receiverwallet" className="font-bold mr-4 m-2 text-black">Receiver Wallet</label>
-            <section className="flex mb-8">
+            <section className="flex mb-2">
               <input
                 type="text"
                 id="receiverwallet"
@@ -425,6 +475,11 @@ const MyForm = () => {
               >
                 <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#ffffff", fontSize: '12px' }} className='m-2 py-0' />
               </button>
+            </section>
+            <section className="flex mb-8">
+              <input id="receivermail" type="email" placeholder="johndoe@mail.com" className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
+                >
+              </input>
             </section>
     
             <div className="p-6 flex items-center justify-center">
