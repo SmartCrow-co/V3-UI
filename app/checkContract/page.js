@@ -239,7 +239,7 @@ export default function Home() {
 				  placeholder="Enter Receiver Wallet Address"
 				  required
 			/>
-			  <section className="flex mb-8">
+			  
 				
 			 
 			  <Autocomplete
@@ -256,16 +256,10 @@ export default function Home() {
                 }}
             />
 			
-				{/*<input
-				  type="text"
-				  id="myAPNInput"
-				  className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
-				  placeholder="Enter APN"
-				  required
-			/>*/}
+			<section className="flex mb-8">
 				<button
 				  type='button'
-				  className='my-2 blue_btn about px-4 py-2'
+				  className='m-2 blue_btn about px-4 py-2'
 				  onClick={checkaddress}
 				>
 				  Check Address
