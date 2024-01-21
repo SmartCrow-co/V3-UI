@@ -9,15 +9,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Autocomplete from "react-google-autocomplete";
 const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
-const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
+//const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
 const RENTCAST_KEY='a0913037a0254b40b51d63cb2de9453c'
 
 const axios = require('axios');
 const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
 
-const NFTcontract="0x5771C86DA1f1cC114Cc2831a37182De41F1Fb972";
-const myabi=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"}],"name":"createSenderFund","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+const NFTcontract="0xe3D952e42C2AF8f5EEd18c5ed9Bd0c13DADAB200";
+const myabi=[{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_usdcToken","type":"address"},{"internalType":"address","name":"_wbtcToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"},{"internalType":"address","name":"token","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"address","name":"token","type":"address"}],"name":"createBonusInfo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdcToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wbtcToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
 const {ethers} = require('ethers');
 var provider;
@@ -106,35 +106,7 @@ export default function Home() {
 	}
 
 	async function callContract(APN) {
-		//Here we need to change to ethereum calls
-		/*const algodToken = '';
-		const algodServer = 'https://testnet-api.algonode.cloud';
-		const algodPort = undefined;
-		const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
-	
-		const suggestedParams = await algodClient.getTransactionParams().do();
-		  console.log('suggestedParams:', suggestedParams);
-	
-		const contract = new algosdk.ABIContract(myabi);
-		const atc = new algosdk.AtomicTransactionComposer();
-	
-		atc.addMethodCall({
-			appID: 469360340,
-			method: algosdk.getMethodByName(contract.methods, 'readFundsWithdrawnStatus'),
-			sender: account,
-			suggestedParams,
-			signer: async (unsignedTxns) => {
-				const txnGroups = unsignedTxns.map((t) => ({txn: t, signers: [t.from]}));
-				return await peraWallet.signTransaction([txnGroups]);
-			},
-			methodArgs: [APN],
-			boxes: [
-				{
-					appIndex: 469360340,
-					name: new Uint8Array(Buffer.from(APN))
-				}
-			],
-		});*/
+		
 		provider = new ethers.BrowserProvider(window.ethereum);
       	const signer = await provider.getSigner();
       	console.log(signer.address);
@@ -147,9 +119,7 @@ export default function Home() {
 
 	
 		try {
-			//to chanhe to contract call
-			//const results = await MyContract.
-			//const results = await atc.execute(algodClient, 3);
+			
 			const active = results.methodResults[0].returnValue
 			if (!active) {
 				setbuttonExistingContract(false);
@@ -225,17 +195,13 @@ export default function Home() {
 	
 	const handleSelect = async(place) => {
 		console.log(place);
-		//setStreetaddress(place['address_components'][1]['long_name']);
-		//setZipcode(place['address_components'][7]['long_name']);
-		//console.log(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
-		//setMyaddress(place['address_components'][0]['short_name']+' '+place['address_components'][1]['short_name']+', '+place['address_components'][3]['short_name']+', '+place['address_components'][5]['short_name'+' '+place['address_components'][7]['short_name']]);
 		console.log(place['formatted_address']);
 		setMyaddress(place['formatted_address']);
 	}
 
 	const checkaddress = async() => {
 		// we need to change this one where the address is put in, with the Google API
-		//console.log('Google API = '+GOOGLE_API_KEY);
+		
 		console.log('street = '+streetaddress);
 		console.log('zip = '+zipcode);
 		var myorder = streetaddress+'_'+zipcode;
@@ -280,14 +246,7 @@ export default function Home() {
                 
                 apiKey={GOOGLE_API_KEY}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input"
-				/*style={{
-                    width: "50%",
-                    marginBottom: 8,
-                    paddingInline: 8,
-                    paddingBlock: 4,
-                    borderRadius: 8,
-                    zIndex: 100,
-                }}*/
+				
                 options={{
                     types: [],
                     componentRestrictions: { country: "us" },
