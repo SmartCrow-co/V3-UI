@@ -449,6 +449,7 @@ const Hometwo = () => {
     
       //const address = accounts.result[0];
       provider = new ethers.BrowserProvider(window.ethereum);
+	  //console.log((await provider.getNetwork()).name);
       const signer = await provider.getSigner();
       console.log(signer.address);
       
