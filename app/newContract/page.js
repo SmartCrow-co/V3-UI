@@ -38,7 +38,7 @@ const DAImultiplier = 1e18;
 
 const NFTcontract="0x8d4D715Cf0f146e2c60000C69EcEa973Db47Ec2a";
 const myabi = [{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_usdcToken","type":"address"},{"internalType":"address","name":"_wbtcToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"},{"internalType":"bool","name":"fundsWithdrawn","type":"bool"},{"internalType":"address","name":"token","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"bool","name":"atOrAbove","type":"bool"},{"internalType":"bool","name":"atOrBelow","type":"bool"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"address","name":"token","type":"address"}],"name":"createBonusInfo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"bool","name":"meetSalesCondition","type":"bool"},{"internalType":"bool","name":"postDeadlineCheck","type":"bool"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdcToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wbtcToken","outputs":[{"internalType":"contract ERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
-const {ethers} = require('ethers');
+const {ethers, getBigInt} = require('ethers');
 var provider;
 var MyContract;
 var MyContractwSigner;
@@ -75,10 +75,15 @@ const MyForm = () => {
   const ReceiverAddress = searchParams.get('Receiver');
   const router = useRouter();
 
-  const approveUSDT = async(amount,chosencontract,chosenabi) =>{
-    const myamount = amount * 1000000;
-
+  const approveUSDT = async(amount,chosenmultiplier,chosencontract,chosenabi) =>{
+    const tempamount = String(amount * chosenmultiplier);
+    console.log(tempamount);
     
+    const myamount = ethers.getBigInt(tempamount);
+    console.log(myamount);
+    //const myamount = ethers.utils.parseEther(amount);
+    //const largeInteger = ethers.BigNumber.from("1000000000000000000");
+    //var myamount = largeInteger;
 
     provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -174,12 +179,12 @@ const MyForm = () => {
       chosenmultiplier = DAImultiplier;
     }
     
-
-    var bonusamount = amount*chosenmultiplier;
+    var tempbonusamount = String(amount*chosenmultiplier);
+    var bonusamount = ethers.getBigInt(tempbonusamount);
     console.log('bonus amount = '+bonusamount);
     //salesPrice /= 1e6
     if(chosencoin!='ETH'){
-      await approveUSDT(amount,chosencontract,chosenabi);
+      await approveUSDT(amount,chosenmultiplier,chosencontract,chosenabi);
     }
     provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -209,7 +214,7 @@ const MyForm = () => {
       await sendconfirmationmail(receivermail);
     }
 
-		console.log(`Contract created ` + results);
+		console.log(`Contract created `);
 		setPopupHeaderSuccess('Contract Initiated!');
 		setShowPopupSuccess(true);
 	}
