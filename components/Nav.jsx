@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 //import { PeraWalletConnect } from "@perawallet/connect";
 
-const NFTcontract="0x006c4237E2233fc5b3793aD9E200076C9Cf99a0E";
+const NFTcontract="0x8d4D715Cf0f146e2c60000C69EcEa973Db47Ec2a";
 const myabi=[
 	{
 		"inputs": [
