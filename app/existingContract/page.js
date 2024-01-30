@@ -48,7 +48,7 @@ async function callContract(senderwallet, receiverwallet, APN) {
 	return resultsArray
 }
 
-async function withdrawSenderPera(APN, account) {
+async function withdrawSenderPera(APN, senderaccount, receiveraccount) {
   provider = new ethers.BrowserProvider(window.ethereum);
   const signer = await provider.getSigner();
   console.log(signer.address);
@@ -57,14 +57,14 @@ async function withdrawSenderPera(APN, account) {
   MyContract = new ethers.Contract(NFTcontract, myabi, signer);
   console.log(MyContract);
 
-  const result = await MyContract.withdrawFundsSender(account,APN);
+  const result = await MyContract.withdrawFundsSender(senderaccount, receiveraccount,APN);
   
   console.log(result);
   
 	return result
 }
 
-async function withdrawReceiverPera(APN, account) {
+async function withdrawReceiverPera(APN, senderaccount, receiveraccount) {
   
   provider = new ethers.BrowserProvider(window.ethereum);
   const signer = await provider.getSigner();
@@ -74,7 +74,7 @@ async function withdrawReceiverPera(APN, account) {
   MyContract = new ethers.Contract(NFTcontract, myabi, signer);
   console.log(MyContract);
 
-  const result = await MyContract.withdrawFundsReceiver(account,APN);
+  const result = await MyContract.withdrawFundsReceiver(senderaccount,receiveraccount,APN);
   
   console.log(result);
 
@@ -145,7 +145,7 @@ const MyPage = () => {
       // Handle the successful response
       console.log('Response:', response.data);
       if (response.data["meetSalesCondition"].condition == false && response.data["postDeadlineCheck"] == true) {
-        await withdrawSenderPera(APN, senderwallet)
+        await withdrawSenderPera(APN, senderwallet, receiverwallet);
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
         setFetch(false)
@@ -185,7 +185,7 @@ const MyPage = () => {
       // Handle the successful response
       console.log('Response:', response.data);
       if (response.data["meetSalesCondition"].condition) {
-        await withdrawReceiverPera(APN, receiverwallet)
+        await withdrawReceiverPera(APN, senderwallet, receiverwallet)
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
         setFetch(false)
