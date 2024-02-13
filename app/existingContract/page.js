@@ -49,6 +49,7 @@ async function callContract(senderwallet, receiverwallet, APN) {
 }
 
 async function withdrawSenderPera(APN, senderaccount, receiveraccount) {
+  console.log('Executing sender withdraw');
   provider = new ethers.BrowserProvider(window.ethereum);
   const signer = await provider.getSigner();
   console.log(signer.address);
@@ -56,8 +57,10 @@ async function withdrawSenderPera(APN, senderaccount, receiveraccount) {
 
   MyContract = new ethers.Contract(NFTcontract, myabi, signer);
   console.log(MyContract);
-
-  const result = await MyContract.withdrawFundsSender(senderaccount, receiveraccount,APN);
+  var mygaslimit = 100000;
+  //var gasest = await MyContract.estimateGas.withdrawFundsSender(senderaccount, receiveraccount,APN);
+  //console.log(gasest);
+  const result = await MyContract.withdrawFundsSender(senderaccount, receiveraccount,APN);//,{gasLimit: mygaslimit});
   
   console.log(result);
   

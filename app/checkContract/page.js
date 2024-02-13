@@ -121,6 +121,7 @@ export default function Home() {
 		try {
 			
 			const active = results.methodResults[0].returnValue
+
 			if (!active) {
 				setbuttonExistingContract(false);
 				setbuttonNewContract(true);
@@ -161,8 +162,10 @@ export default function Home() {
 		
 		console.log('myaddress = '+myaddress);
 		var result = await MyContract.bonusInfo(mysenderwallet,myreceiverwallet,myaddress);
+		console.log('contract paid out = '+result[10]);
+		var contractInactive = result[10];
 		var returnresult=1;
-		if (result[0]!=mysenderwallet){
+		if (result[0]!=mysenderwallet && contractInactive==false){
 			setbuttonExistingContract(true);
 			setbuttonNewContract(false);
 			returnresult=0;
