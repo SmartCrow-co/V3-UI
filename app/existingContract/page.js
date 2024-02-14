@@ -152,7 +152,8 @@ const MyPage = () => {
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
         setFetch(false)
-        router.push('/checkContract');
+
+        //router.push('/checkContract');
       }
       else {
         setPopupHeader('Unable to withdraw');
@@ -216,6 +217,7 @@ const MyPage = () => {
 
 	  const handleClosePopupSuccess = () => {
         setShowPopupSuccess(false);
+        router.push('/checkContract');
       };
 
     const handleWithdrawRealtor = async() => {
