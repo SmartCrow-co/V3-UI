@@ -120,7 +120,7 @@ const MyPage = () => {
   const ReceiverAddress = searchParams.get('Receiver');
 
   useEffect(() => {
-		
+		refresh();
 	}, []);
 	
 

@@ -137,14 +137,14 @@ const MyForm = () => {
 
 	async function callBonus(account) {
 		var APN = document.getElementById("parcelid").value;
-		var amount = document.getElementById("bonusamount").value;
+		var amount = mybonusamount;//document.getElementById("bonusamount").value;
     var seller = document.getElementById("senderwallet").value;
 		var realtor = document.getElementById("receiverwallet").value;
 		var Sellby = new Date(document.getElementById("sellbydate").value);
 		var selltimestamp = Math.floor(Sellby.getTime()/1000);
 		var Startby = new Date(document.getElementById("startdate").value);
 		var startdatetimestamp = Math.floor(Startby.getTime()/1000);
-    var salesPrice = document.getElementById("salesprice").value;
+    var salesPrice = mysalesprice;//document.getElementById("salesprice").value;
     var boolabove = PriceCondition;
     var boolbelow = !PriceCondition;
     var chosencoin = document.getElementById("usedcoin").value;
