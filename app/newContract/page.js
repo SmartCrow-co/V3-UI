@@ -61,6 +61,7 @@ const MyForm = () => {
   const [sendermail,setSendermail]= useState('');
   const [receiverermail,setReceivermail]= useState('');
   const [usedCoin,setUsedCoin]=useState('USDT');
+  const [userconf,setUserconf]=useState(false);
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -283,6 +284,11 @@ const MyForm = () => {
       //console.log(document.getElementById('usedcoin').value);
     }
 
+    const changeUserconfirm = () => {
+      //console.log(document.getElementById('userconfirm').checked);
+      setUserconf(document.getElementById('userconfirm').checked);
+    }
+
 	  const handleChange = async() => {
       console.log('Verifying input');
       const verAmount= document.getElementById("bonusamount").value;
@@ -291,10 +297,12 @@ const MyForm = () => {
       const verSeller = document.getElementById("senderwallet").value;
       const verRealtor = document.getElementById("receiverwallet").value;
       const salesPrice = document.getElementById("salesprice").value;
-
+      const userconfirmation = document.getElementById("userconfirm").checked;
+      
+      setUserconf(document.getElementById('userconfirm').checked);
 
       if (isForSale) {
-        if (verAmount==0 || verStartdate=="" || verSellbydate=="" ||verSeller=="" || verRealtor=="" || salesPrice=="" || verSeller==verRealtor) {
+        if (verAmount==0 || verStartdate=="" || verSellbydate=="" ||verSeller=="" || verRealtor=="" || salesPrice=="" || verSeller==verRealtor || userconfirmation==false) {
           setVerified(true);
         }
         else {
@@ -302,7 +310,7 @@ const MyForm = () => {
         }
       }
       else {
-        if (verAmount==0 || verStartdate=="" || verSellbydate=="" ||verSeller=="" || verRealtor=="" || verSeller==verRealtor) {
+        if (verAmount==0 || verStartdate=="" || verSellbydate=="" ||verSeller=="" || verRealtor=="" || verSeller==verRealtor || userconfirmation==false) {
           setVerified(true);
         }
         else {
@@ -573,6 +581,11 @@ const MyForm = () => {
               <input id="receivermail" type="email" placeholder="johndoe@mail.com" className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 >
               </input>
+            </section>
+            <section className="flex mb-2">
+              <input type="checkbox" id="userconfirm" onChange={handleChange}></input>
+              <p className="ml-2">I confirm the data entered is accurate.  I understand once the contract is created it permanent and can’t be edited</p>
+
             </section>
     
             <div className="p-6 flex items-center justify-center">
