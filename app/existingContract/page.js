@@ -359,7 +359,7 @@ const MyPage = () => {
   
             {fetching && (
               <div className="w-full sm:w-1/2 text-center mr-10">
-                <p className="text-default-text">Fetching...</p>
+                <p className="text-default-text">Requesting data from county. This may take several minutes.</p>
               </div>
             )}
   

@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Popup from '@/components/popup';
 import PopupSuccess from '@/components/popupsuccess';
 import PopupInfo from '@/components/popupinfo';
+import numeral from 'numeral';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
@@ -43,6 +44,9 @@ var provider;
 var MyContract;
 var MyContractwSigner;
 
+const formatNumberWithCommas = (value) => {
+  return numeral(value).format('0,0');
+};
 
 const MyForm = () => {
   const today = new Date().toISOString().substring(0, 10); // Get today's date in yyyy-mm-dd format
@@ -62,6 +66,8 @@ const MyForm = () => {
   const [receiverermail,setReceivermail]= useState('');
   const [usedCoin,setUsedCoin]=useState('USDT');
   const [userconf,setUserconf]=useState(false);
+  const [mybonusamount,setMybonusamount]=useState(0);
+  const [mysalesprice,setMysalesprice]=useState(0);
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -291,13 +297,16 @@ const MyForm = () => {
 
 	  const handleChange = async() => {
       console.log('Verifying input');
-      const verAmount= document.getElementById("bonusamount").value;
+      const verAmount= Number(document.getElementById("bonusamount").value.replace(/,/g, ''));
       const verStartdate= document.getElementById("startdate").value;
       const verSellbydate= document.getElementById("sellbydate").value;
       const verSeller = document.getElementById("senderwallet").value;
       const verRealtor = document.getElementById("receiverwallet").value;
-      const salesPrice = document.getElementById("salesprice").value;
+      const salesPrice = Number(document.getElementById("salesprice").value.replace(/,/g, ''));
       const userconfirmation = document.getElementById("userconfirm").checked;
+      setMybonusamount(verAmount);
+      //console.log('bonus amount: '+mybonusamount);
+      setMysalesprice(salesPrice);
       
       setUserconf(document.getElementById('userconfirm').checked);
 
@@ -364,13 +373,14 @@ const MyForm = () => {
             </label>
             <section className="flex mb-8">
               <input
-                type="number"
+                type="text"
                 placeholder='0'
                 inputMode='numeric'
                 id="bonusamount"
                 min="0"
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
+                value={mybonusamount.toLocaleString()}
               />
               <select id="usedcoin" value={usedCoin} onChange={handleOptionChangeCoin}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
@@ -518,13 +528,14 @@ const MyForm = () => {
             </label>
             <section className="flex mb-8">
               <input
-                type="number"
+                type="text"
                 inputMode='numeric'
                 id="salesprice"
                 min="0"
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
                 onChange={handleChange}
                 disabled={!isForSale}
+                value={mysalesprice.toLocaleString()}
               />
               <button 
                 type="button" 
@@ -584,7 +595,7 @@ const MyForm = () => {
             </section>
             <section className="flex mb-2">
               <input type="checkbox" id="userconfirm" onChange={handleChange}></input>
-              <p className="ml-2">I confirm the data entered is accurate.  I understand once the contract is created it permanent and can’t be edited</p>
+              <p className="ml-2 text-default-text">I confirm the data entered is accurate.  I understand once the contract is created it permanent and can’t be edited</p>
 
             </section>
     
