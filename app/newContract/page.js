@@ -329,18 +329,18 @@ const MyForm = () => {
 	  }
 
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen max-w-xs sm:max-w-2xl">
         <nav className="flex justify-between items-center">
           <p className="text-black font-bold text-sm md:text-lg m-2">New Contract</p>
         </nav>
         <div className="container mx-auto pb-3">
           <div className="flex flex-col gap-0.5">
             
-            <section className="flex mb-8">
+            <section className="flex mb-8 max-w-xs sm:max-w-lg">
               <input
                 type="text"
                 id="parcelid"
-                className="m-2 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
+                className="m-2 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 border APN_input  max-w-screen-sm flex-grow"
                 defaultValue={SelAPN}
                 onChange={handleChange}
                 placeholder="APN"
@@ -404,7 +404,7 @@ const MyForm = () => {
             </section>
     
             {/* Dates */}
-            <div className='container flex flex-row'>
+            <div className='container flex flex-col sm:flex-row'>
               <div className='left-date'>
                 <label htmlFor="bonusamount" className="font-bold m-2 text-black">
                   Start Date
@@ -428,7 +428,7 @@ const MyForm = () => {
                 </div>
               </div>
     
-              <div className='right-date ml-12'>
+              <div className='right-date sm:ml-12'>
                 <label htmlFor="bonusamount" className="font-bold m-2 text-black">
                   Sold By
                 </label>

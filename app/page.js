@@ -10,7 +10,7 @@ const Home = () => (
 	  SmartCrow is an easy-to-use smart contract tool for real estate agents to create a digital escrow for real estate transactions utilizing Algorand blockchain technology.  Create escrow smart contracts for real estate anywhere, anytime, with SmartCrow!
 	  </p>
   
-	  <div className='sm:flex hidden btn-below margin'>
+	  <div className='flex'>
 			<>
 			<a href="https://www.smartcrow.info/">
 				  <button
