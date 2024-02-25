@@ -321,7 +321,7 @@ const MyPage = () => {
             defaultValue={Address}
             disabled
           />
-          <div className="p-6 rounded border border border-sky-200">
+          <div className="p-6 rounded border border-sky-200">
             <div className="flex rounded px-2 py-2">
               <div className="w-1/2">
                 <ul className="list-inside text-black">

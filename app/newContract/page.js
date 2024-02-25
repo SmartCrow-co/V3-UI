@@ -67,7 +67,9 @@ const MyForm = () => {
   const [usedCoin,setUsedCoin]=useState('USDT');
   const [userconf,setUserconf]=useState(false);
   const [mybonusamount,setMybonusamount]=useState(0);
+  const [mybonusamountrep,setMybonusamountrep]=useState('');
   const [mysalesprice,setMysalesprice]=useState(0);
+  const [mysalespricerep,setsalespricerep]=useState('');
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -100,6 +102,47 @@ const MyForm = () => {
     console.log(result);
 
 
+  }
+
+  //function to add thousand separator
+  const addthousandseparator = (myvalue) => {
+    console.log('myvalue : '+myvalue);
+    var result='';
+    if(myvalue!=''){
+    var myrepvalue = String(myvalue).replace(/,/g, '');
+    const [myint,myfrac] = myrepvalue.split('.');
+    console.log('myfrac : '+myfrac);
+    const myintrep = Number(myint).toLocaleString();
+    console.log(myintrep);
+    
+    if (myfrac==undefined){
+      result = String(myintrep);
+    }
+    else{
+      result = String(myintrep)+'.'+myfrac;
+    }}
+    
+    return result;
+  }
+
+  const addthousandseparator2 = (myvalue) => {
+    console.log('myvalue : '+myvalue);
+    var result='';
+    if(myvalue!=''){
+    var myrepvalue = String(myvalue).replace(/,/g, '');
+    const [myint,myfrac] = myrepvalue.split('.');
+    console.log('myfrac : '+myfrac);
+    const myintrep = Number(myint).toLocaleString();
+    console.log(myintrep);
+    
+    if (myfrac==undefined){
+      result = String(myintrep);
+    }
+    else{
+      result = String(myintrep)+'.'+myfrac;
+    }}
+    
+    return result;
   }
 
   const sendconfirmationmail = async(mailaddress) => {
@@ -297,17 +340,22 @@ const MyForm = () => {
 
 	  const handleChange = async() => {
       console.log('Verifying input');
-      const verAmount= Number(document.getElementById("bonusamount").value.replace(/,/g, ''));
+      //console.log('bonus : '+document.getElementById("bonusamount").value);
+      const verAmount= parseFloat(document.getElementById("bonusamount").value.replace(/,/g, ''));
       const verStartdate= document.getElementById("startdate").value;
       const verSellbydate= document.getElementById("sellbydate").value;
       const verSeller = document.getElementById("senderwallet").value;
       const verRealtor = document.getElementById("receiverwallet").value;
-      const salesPrice = Number(document.getElementById("salesprice").value.replace(/,/g, ''));
+      const salesPrice = parseFloat(document.getElementById("salesprice").value.replace(/,/g, ''));
       const userconfirmation = document.getElementById("userconfirm").checked;
       setMybonusamount(verAmount);
+      
+
+      //setMybonusamountrep(addthousandseparator(document.getElementById("bonusamount").value));
       //console.log('bonus amount: '+mybonusamount);
       setMysalesprice(salesPrice);
-      
+      console.log('salesprice : '+mysalesprice);
+      //setsalespricerep(await addthousandseparator2(document.getElementById("salesprice").value));
       setUserconf(document.getElementById('userconfirm').checked);
 
       if (isForSale) {
@@ -374,13 +422,13 @@ const MyForm = () => {
             <section className="flex mb-8">
               <input
                 type="text"
-                placeholder='0'
+                placeholder=''
                 inputMode='numeric'
                 id="bonusamount"
-                min="0"
+                
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
-                onChange={handleChange}
-                value={mybonusamount.toLocaleString()}
+                onChange={()=>{handleChange();setMybonusamountrep(addthousandseparator(document.getElementById("bonusamount").value));}}
+                value={mybonusamountrep}
               />
               <select id="usedcoin" value={usedCoin} onChange={handleOptionChangeCoin}
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
@@ -531,11 +579,11 @@ const MyForm = () => {
                 type="text"
                 inputMode='numeric'
                 id="salesprice"
-                min="0"
+                
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
-                onChange={handleChange}
+                onChange={() =>{handleChange();setsalespricerep(addthousandseparator2(document.getElementById("salesprice").value));}}
                 disabled={!isForSale}
-                value={mysalesprice.toLocaleString()}
+                value={mysalespricerep}
               />
               <button 
                 type="button" 
