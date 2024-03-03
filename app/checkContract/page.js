@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Autocomplete from "react-google-autocomplete";
-const GOOGLE_API_KEY='AIzaSyCdgb63drAUPidFDZKNQnxix_ZQqwpfaxc';
+const GOOGLE_API_KEY='AIzaSyBIoVjxfT0CXsJUmQBNYHlx8_z5-9J6hdA';
 //const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
 const RENTCAST_KEY='a0913037a0254b40b51d63cb2de9453c'
 
