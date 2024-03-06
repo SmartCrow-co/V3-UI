@@ -147,7 +147,7 @@ const MyPage = () => {
     .then(async response => {
       // Handle the successful response
       console.log('Response:', response.data);
-      if (response.data["meetSalesCondition"].condition == 2 && response.data["postDeadlineCheck"] == 1) {
+      if (response.data["meetSalesCondition"].condition == false && response.data["postDeadlineCheck"] == 1) {
         await withdrawSenderPera(APN, senderwallet, receiverwallet);
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
@@ -188,7 +188,7 @@ const MyPage = () => {
     .then(async response => {
       // Handle the successful response
       console.log('Response:', response.data);
-      if (response.data["meetSalesCondition"].condition==1) {
+      if (response.data["meetSalesCondition"].condition==true) {
         await withdrawReceiverPera(APN, senderwallet, receiverwallet)
         setPopupHeaderSuccess('Withdrawal Initiated. ' + response.data["meetSalesCondition"].reason);
         setShowPopupSuccess(true);
