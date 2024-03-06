@@ -125,7 +125,7 @@ const MyPage = () => {
 	
 
   async function updateContractInfoSeller(senderwallet, receiverwallet, APN){
-    const apiUrl = 'https://smartcrow-backend-goerli.onrender.com/api/update-contract'; 
+    const apiUrl = 'https://smartcrow-backend-goerli-6rj4.onrender.com/api/update-contract'; 
     console.log('sender: '+senderwallet);
     console.log('receiver: '+receiverwallet);
     console.log('APN: '+APN);
@@ -169,7 +169,7 @@ const MyPage = () => {
   }
   
   async function updateContractInfoReceiver(senderwallet, receiverwallet, APN){
-    const apiUrl = 'https://smartcrow-backend-goerli.onrender.com/api/update-contract'; 
+    const apiUrl = 'https://smartcrow-backend-goerli-6rj4.onrender.com/api/update-contract'; 
   
     // Example data to send in the request body
     const requestData = {

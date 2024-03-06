@@ -150,7 +150,7 @@ const MyForm = () => {
   }
 
   const sendconfirmationmail = async(mailaddress) => {
-    const apiUrl = 'https://smartcrow-backend-goerli.onrender.com/api/send-email'; 
+    const apiUrl = 'https://smartcrow-backend-goerli-6rj4.onrender.com/api/send-email'; 
     console.log('mail address = '+mailaddress);
     const senderwallet = document.getElementById('senderwallet').value;
     const receiverwallet = document.getElementById('receiverwallet').value;
@@ -308,9 +308,19 @@ const MyForm = () => {
     };
 
 	  const handleClickBalloon = () => {
-		setBalloonText('The amount entered is in Algos. For a conversion to USD, please visit https://www.coinbase.com/converter/algo/usd');
+		setBalloonText('This is your subject address for the contract. The APN/Parcel ID below should match your address.');
 		setShowBalloon(true);
 	  }
+
+    const handleClickBalloonConverter = () => {
+      setBalloonText('Use the crypto currency converter to calculate the contract funding amount. Press the currency name (i.e. BTC / USD) to find other currency exchange rates.');
+      setShowBalloon(true);
+    }
+
+    const handleClickBalloonAmount = () => {
+      setBalloonText('Choose your crypto token from the dropdown menu. Enter the amount of the crypto token. This amount will fund the contract. Use the crypto currency converter above to calculate the amount you wish to enter.');
+      setShowBalloon(true);
+      }
 
 	  const handleClickBalloon2 = () => {
 		setBalloonText('This is the start date of the contract.');
@@ -318,22 +328,22 @@ const MyForm = () => {
 	  }
 
 	  const handleClickBalloon3 = () => {
-		setBalloonText('This is the end date of the contract. The real property grant deed must be recorded by this date.');
+		setBalloonText('This is the end date of the contract. The real estate/subject property must record a grand deed by this date. If the contract terms are not met, then the contract expires after 30-60 days and the seller may withdraw its funds.');
 		setShowBalloon(true);
 	  }
 
 	  const handleClickBalloon4 = () => {
-		setBalloonText('This is the sender wallet address. This wallet address will fund the contract via Metamask.');
+		setBalloonText('The sender wallet is the creator of the contract. The sender will fund the contract from their Metamask wallet. Optional: enter an email address to receive a contract confirmation.');
 		setShowBalloon(true);
 	  }
 
 	  const handleClickBalloon5 = () => {
-		setBalloonText('This is the receiver wallet address. If contract terms are met, funds will be sent to the receiver wallet address.');
+		setBalloonText('The receiver wallet receives funds if all contract terms are met. After local county records are recorded and updated sales data of the subject property, the contract can be executed for funds to go the receiver wallet. Optional: enter an email address to receive a contract confirmation.');
 		setShowBalloon(true);
 	  }
 
     const handleClickBalloon6 = () => {
-      setBalloonText('This is the sales price of the conract. Add the anticipated, future, greater than or equal to sales price of the real estate/home.');
+      setBalloonText('The sales price is an optional term. This contract term is the projected sales price of the subject property. This term can be set as equal or above or equal or below the projected sales price.');
       setShowBalloon(true);
       }
 
@@ -426,6 +436,13 @@ const MyForm = () => {
             <section className="flex m-2 mt-0 items-center justify-center">
             <script async src="https://cdn.jsdelivr.net/gh/dejurin/crypto-converter-widget@1.5.2/dist/latest.min.js"></script>
               <crypto-converter-widget shadow symbol live background-color="#383a59" border-radius="0.60rem" fiat="united-states-dollar" crypto="bitcoin" amount="1" decimal-places="2"></crypto-converter-widget>
+              <button 
+                type="button" 
+                onClick={handleClickBalloonConverter}
+                className="info_btn m-2 about hover:bg-[#000000]/90 focus:outline-none focus:ring-[#000000]/50 inline-flex items-center hover:text-[#ffffff] dark:focus:ring-[#000000]/55"
+              >
+                <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#ffffff", fontSize: '12px' }} className='m-2 py-0' />
+              </button>
             </section>
     
             {/* Amount USDC */}
@@ -457,7 +474,7 @@ const MyForm = () => {
               </select>
               <button 
                 type="button" 
-                onClick={handleClickBalloon}
+                onClick={handleClickBalloonAmount}
                 className="info_btn m-2 about hover:bg-[#000000]/90 focus:outline-none focus:ring-[#000000]/50 inline-flex items-center hover:text-[#ffffff] dark:focus:ring-[#000000]/55"
               >
                 <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#ffffff", fontSize: '12px' }} className='m-2 py-0' />

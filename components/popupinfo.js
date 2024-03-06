@@ -25,10 +25,10 @@ const PopupInfo = ({text, closeModal, isOpen}) => {
       ref={modalRef}>
       <div className="w-full max-w-md max-h-screen bg-white rounded-lg p-4 transform transition-all duration-300 opacity-100 scale-100">
       {/* Header text */}
-      <h1 className="text-h text-gray-700 font-bold flex justify-center">Follow Below Instructions</h1>
+      {/*<h1 className="text-h text-gray-700 font-bold flex justify-center">Follow Below Instructions</h1>*/}
       <div>
       {/*<ReactSVG src="/assets/images/moreinfo.svg" className="mb-5" />*/}
-      <h3 className="text-m text-gray-700 m-2">{text}</h3>
+      <h3 className="text-m text-gray-700 m-2 justify-center">{text}</h3>
       </div>
     </div>
   </div>

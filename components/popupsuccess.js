@@ -25,6 +25,8 @@ const PopupSuccess = ({ header, text, closeModal, isOpen}) => {
       <div className="w-full max-w-md bg-white rounded-lg p-4 transform transition-all duration-300 opacity-100 scale-100">
       {/* Header text */}
       <h2 className="text-xl mb-4 flex justify-center text-gray-700">{header}</h2>
+      <p className="text-xl mb-4 flex justify-center text-gray-700">Final contract confirmation comes directly from Metamask</p>
+      
       {/* Horizontal dividing line */}
       <hr className="border-black my-4" />
       {/* Icon */}
