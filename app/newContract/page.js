@@ -357,6 +357,11 @@ const MyForm = () => {
       setShowBalloon(true);
       }
 
+    const handleClickBalloonTerms = () => {
+        setBalloonText('County/public records can take up to 30-60 days to update subject property sales data. The sender wallet is locked from cancelling the contract for 30 to 60 days to allow new sales data to be recorded.  After 30 to 60 days, if terms are not met, the sender wallet can cancel the contract.  The contract can execute before 30 days if subject property sales data has been updated by county/public records.');
+        setShowBalloon(true);
+      }
+
 	  const handleCloseBalloon = () => {
         setShowBalloon(false);
       };
@@ -582,6 +587,13 @@ const MyForm = () => {
                   60 days
                 </label>
               </div>
+              <button 
+                type="button" 
+                onClick={handleClickBalloonTerms}
+                className="info_btn ml-6 m-2 about hover:bg-[#000000]/90 focus:outline-none focus:ring-[#000000]/50 inline-flex items-center hover:text-[#ffffff] dark:focus:ring-[#000000]/55"
+              >
+                <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#ffffff", fontSize: '12px' }} className='m-2 py-0' />
+              </button>
             </div>
     
             {/* Add Sales Price */}
