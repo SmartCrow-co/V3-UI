@@ -11,7 +11,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 
 //How many days of slack? 1 for 30 and 2 for 60 days
-const minRequestDays = 2;
+var minRequestDays = 2;
 
 const axios = require('axios');
 
@@ -63,7 +63,7 @@ const MyForm = () => {
 	const [showBalloon,setShowBalloon] = useState(false);
 	const [balloonText,setBalloonText] = useState("");
 	const [accountAddress, setAccountAddress] = useState(null);
-  const [isForSale, setIsForSale] = useState(true);
+  const [isForSale, setIsForSale] = useState(false);
   const [PriceCondition, setPriceCondition] = useState(true);
   const isConnectedToPeraWallet = !!accountAddress;
   const [sendermail,setSendermail]= useState('');
@@ -74,6 +74,7 @@ const MyForm = () => {
   const [mybonusamountrep,setMybonusamountrep]=useState('');
   const [mysalesprice,setMysalesprice]=useState(0);
   const [mysalespricerep,setsalespricerep]=useState('');
+  const [slack, setSlack] = useState(false);
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -150,7 +151,7 @@ const MyForm = () => {
   }
 
   const sendconfirmationmail = async(mailaddress) => {
-    const apiUrl = 'https://smartcrow-backend-goerli-6rj4.onrender.com/api/send-email'; 
+    const apiUrl = 'https://smartcrow-backend-goerli-2.onrender.com/api/send-email'; 
     console.log('mail address = '+mailaddress);
     const senderwallet = document.getElementById('senderwallet').value;
     const receiverwallet = document.getElementById('receiverwallet').value;
@@ -196,6 +197,15 @@ const MyForm = () => {
     var boolbelow = !PriceCondition;
     var intPriceCOndition;
     var chosencoin = document.getElementById("usedcoin").value;
+    var minreqdays = 1;
+
+    if (Number.isNaN(salesPrice)){
+      salesPrice=0;
+    }
+
+    if (!slack){
+      minreqdays=2;
+    }
     console.log('chosen coin = '+chosencoin);
 
     intPriceCOndition=2;
@@ -258,13 +268,13 @@ const MyForm = () => {
     console.log(MyContract);
     //MyContractwSigner = await MyContract.connect(signer);
 
-    
+    console.log('minrequestdays = '+minreqdays);
     
     if (chosencoin!='ETH'){
-		  const results = await MyContract.createBonusInfo(realtor,APN,startdatetimestamp,selltimestamp,intPriceCOndition,minRequestDays,salesPrice,bonusamount,chosencontract);
+		  const results = await MyContract.createBonusInfo(realtor,APN,startdatetimestamp,selltimestamp,intPriceCOndition,minreqdays,salesPrice,bonusamount,chosencontract);
     }
     else{
-      const results2 = await MyContract.createBonusInfo(realtor,APN,startdatetimestamp,selltimestamp,intPriceCOndition,minRequestDays,salesPrice,bonusamount,chosencontract,{value:bonusamount});
+      const results2 = await MyContract.createBonusInfo(realtor,APN,startdatetimestamp,selltimestamp,intPriceCOndition,minreqdays,salesPrice,bonusamount,chosencontract,{value:bonusamount});
     }
     const sendermail = document.getElementById('sendermail').value;
     const receivermail = document.getElementById('receivermail').value;
@@ -328,7 +338,7 @@ const MyForm = () => {
 	  }
 
 	  const handleClickBalloon3 = () => {
-		setBalloonText('This is the end date of the contract. The real estate/subject property must record a grand deed by this date. If the contract terms are not met, then the contract expires after 30-60 days and the seller may withdraw its funds.');
+		setBalloonText('This is the end date of the contract. The real estate/subject property must record a grand deed by this date. If the contract terms are not met, then the contract expires after 30-60 days and the sender/creator of the contract can withdraw funds.');
 		setShowBalloon(true);
 	  }
 
@@ -338,7 +348,7 @@ const MyForm = () => {
 	  }
 
 	  const handleClickBalloon5 = () => {
-		setBalloonText('The receiver wallet receives funds if all contract terms are met. After local county records are recorded and updated sales data of the subject property, the contract can be executed for funds to go the receiver wallet. Optional: enter an email address to receive a contract confirmation.');
+		setBalloonText('The receiver wallet receives funds if all contract terms are met. After local county/public records publishes updated sales data of the subject property, the contract can be executed and funds released. Optional: enter an email address to receive a contract confirmation.');
 		setShowBalloon(true);
 	  }
 
@@ -372,6 +382,15 @@ const MyForm = () => {
       const salesPrice = parseFloat(document.getElementById("salesprice").value.replace(/,/g, ''));
       const userconfirmation = document.getElementById("userconfirm").checked;
       setMybonusamount(verAmount);
+
+      if (slack) {
+        minRequestDays=1;
+      }
+      else{
+        minRequestDays=2;
+      }
+      console.log('slack selection = '+slack);
+      console.log('slack = '+minRequestDays);
       
 
       //setMybonusamountrep(addthousandseparator(document.getElementById("bonusamount").value));
@@ -529,6 +548,41 @@ const MyForm = () => {
                 </div>
               </div>
             </div>
+            {/*Slack selection*/}
+            <label htmlFor="slacksel" className="font-bold m-2 text-black">Select Time Frame: </label>
+            <div className="flex items-center flex-row p-2">
+              <div className="flex items-center">
+                <label className="mr-10 m-2">
+                  <input
+                    type="radio"
+                    id="30"
+                    checked={slack}
+                    onChange={() => {
+                      setSlack(true);
+                      handleChange();
+                      //console.log("handle change2");
+                    }}
+                    className="mr-1"
+                  />
+                  30 days
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    id="no"
+                    checked={!slack}
+                    onChange={() => {
+                      setSlack(false);
+                      
+                      handleChange();
+                      //console.log("handle change");
+                    }}
+                    className="mr-1"
+                  />
+                  60 days
+                </label>
+              </div>
+            </div>
     
             {/* Add Sales Price */}
             <label htmlFor="bonusamount" className="font-bold m-2 text-black">Add Sales Price: </label>
@@ -602,7 +656,7 @@ const MyForm = () => {
             </div>
             {/* Sales Price */}
             <label htmlFor="bonusamount" className="font-bold mt-4 m-2 text-black">
-              Sales Price :
+              Sales Price (USD) :
             </label>
             <section className="flex mb-8">
               <input
@@ -673,7 +727,7 @@ const MyForm = () => {
             </section>
             <section className="flex mb-2">
               <input type="checkbox" id="userconfirm" onChange={handleChange}></input>
-              <p className="ml-2 text-default-text">I confirm the data entered is accurate.  I understand once the contract is created it permanent and can’t be edited</p>
+              <p className="ml-2 text-default-text">I confirm the data entered is accurate.  I understand once the contract is created it is permanent and can’t be edited</p>
 
             </section>
     

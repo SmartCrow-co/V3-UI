@@ -158,7 +158,7 @@ export default function Home() {
 	}
 
 	const handleClickBalloon = () => {
-		setBalloonText('Check the address of the given APN. If there is no active contract on the given APN, you can create a new contract. If there is an active contract, you can check the details of the existing contract.');
+		setBalloonText('Enter wallet addresses. The sender wallet is the creator and funder of the contract. The receiver wallet receives funds if contract terms are met.  Enter address and press check address button.  The address will display with its APN/Parcel ID.  Confirm the address and APN/Parcel ID match your records.');
 		setShowBalloon(true);
 	}
 
