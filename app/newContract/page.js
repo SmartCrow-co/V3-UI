@@ -74,7 +74,7 @@ const MyForm = () => {
   const [mybonusamountrep,setMybonusamountrep]=useState('');
   const [mysalesprice,setMysalesprice]=useState(0);
   const [mysalespricerep,setsalespricerep]=useState('');
-  const [slack, setSlack] = useState(false);
+  const [slack, setSlack] = useState(true);
 
 	useEffect(() => {
 		// Reconnect to the session when the component is mounted
@@ -155,7 +155,7 @@ const MyForm = () => {
     console.log('mail address = '+mailaddress);
     const senderwallet = document.getElementById('senderwallet').value;
     const receiverwallet = document.getElementById('receiverwallet').value;
-    var mymessage = 'Created a bonus contract with sender wallet '+senderwallet+' and receiver wallet '+receiverwallet+' for address '+SelAPN;
+    var mymessage = 'Created a smart contract with sender wallet '+senderwallet+' and receiver wallet '+receiverwallet+' for address '+SelAPN;
   
     // Example data to send in the request body
     const requestData = {
@@ -488,7 +488,7 @@ const MyForm = () => {
                 className="w-60 bg-default-bg rounded px-3 py-2 focus:outline-offset-0 outline-sky-200 m-2 border APN_input max-w-screen-sm flex-grow"
               >
                 
-                <option value="ETH">Native</option>
+                <option value="ETH">MATIC</option>
                 <option value="USDT">USDT</option>
                 <option value="USDC">USDC</option>
                 <option value="WETH">WETH</option>
@@ -554,7 +554,7 @@ const MyForm = () => {
               </div>
             </div>
             {/*Slack selection*/}
-            <label htmlFor="slacksel" className="font-bold m-2 text-black">Select Time Frame: </label>
+            <label htmlFor="slacksel" className="font-bold m-2 text-black">Contract Cancellation Lockout: </label>
             <div className="flex items-center flex-row p-2">
               <div className="flex items-center">
                 <label className="mr-10 m-2">

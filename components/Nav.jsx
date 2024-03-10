@@ -406,6 +406,13 @@ var MyContractwSigner;
 
 //const peraWallet = new PeraWalletConnect();
 
+const formatLongString = (str) => {
+	if (str.length > 6) {
+	  return str.slice(0, 3) + '...' + str.slice(-3);
+	}
+	return str;
+};
+
 const Hometwo = () => {
   	const [accountAddress, setAccountAddress] = useState(null);
   	const isConnectedToPeraWallet = !!accountAddress;
@@ -480,7 +487,7 @@ const Hometwo = () => {
                   type='button'
                   className='black_btn'
                   onClick={isConnectedToPeraWallet ? disconnect : login}>
-                  {isConnectedToPeraWallet ? "Disconnect Metamask" : "Connect Metamask"}
+                  {isConnectedToPeraWallet ? formatLongString(accountAddress) : "Connect Metamask"}
                  
                 </button>
           </>
@@ -494,7 +501,7 @@ const Hometwo = () => {
                   className='black_btn'
                   onClick={isConnectedToPeraWallet ? disconnect : login}
                 >
-                  {isConnectedToPeraWallet ? "Disconnect Metamask" : "Connect Metamask"}
+                  {isConnectedToPeraWallet ? formatLongString(accountAddress) : "Connect Metamask"}
                 </button>
           </>
         
