@@ -418,24 +418,7 @@ const Hometwo = () => {
   	const isConnectedToPeraWallet = !!accountAddress;
 
 	useEffect(() => {
-		// Reconnect to the session when the component is mounted
-		 /* if (typeof window.ethereum !== 'undefined') {
-        console.log('Metamask is installed!');
-      
-      }
-      var myprovider = window.ethereum;
-  
-      const accounts = await window.ethereum.send(
-        "eth_requestAccounts"
-      )
-    
-      const address = accounts.result[0];
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner(address);
-
-      MyContract = new ethers.Contract(NFTcontract, myabi, provider);
-
-      MyContractwSigner = await MyContract.connect(signer);*/
+		login();
 	}, []);
 
 	const disconnect = async () => {
