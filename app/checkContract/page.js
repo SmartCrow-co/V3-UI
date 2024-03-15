@@ -123,6 +123,7 @@ export default function Home() {
 
   	const login = async () => {
 		//Do we need to log in here?
+		
 	}
 
 	async function callContract(APN) {
