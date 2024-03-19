@@ -114,7 +114,17 @@ export default function Home() {
 					console.error('Error calling API:', error.message);
 				  });
 	  }
-	  
+
+	const getPropDetails = async() => {
+		console.log('streetaddress = '+streetaddress);
+		console.log('zipcode = '+zipcode);
+		const responser = await fetch('/api/propmix?myaddress='+streetaddress+'&myzipcode='+zipcode);
+		const data = await responser.json();
+		//console.log('Do we get a response??');
+		console.log(data.message);
+		return data.message;
+
+	}
 
 	const disconnect = async () => {
 		//peraWallet.disconnect();
@@ -223,6 +233,8 @@ export default function Home() {
 		console.log(place);
 		console.log(place['formatted_address']);
 		setMyaddress(place['formatted_address']);
+		setStreetaddress(place['address_components'][0]['long_name']+' '+place['address_components'][1]['long_name']);
+		setZipcode(place['address_components'][7]['long_name']);
 	}
 
 	const checkaddress = async() => {
@@ -232,7 +244,8 @@ export default function Home() {
 		console.log('zip = '+zipcode);
 		var myorder = streetaddress+'_'+zipcode;
 		var response = await checkAPN();
-		var myAPN = await getPropertyInfoRentCast(myaddress);
+		//var myAPN = await getPropertyInfoRentCast(myaddress);
+		var myAPN = await getPropDetails();
 		console.log(myAPN);
 		console.log(typeof myAPN);
 		const myText = document.getElementById("addresscheck");
