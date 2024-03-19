@@ -21,12 +21,13 @@ import Autocomplete from "react-google-autocomplete";
 
 const GOOGLE_API_KEY='AIzaSyBIoVjxfT0CXsJUmQBNYHlx8_z5-9J6hdA';
 //const PROPERTY_API_KEY='f3f35d71a871fe8a775387875e11f8f340f4b77698c1933609eff43e959271c2';
-const RENTCAST_KEY='a0913037a0254b40b51d63cb2de9453c'
+//const RENTCAST_KEY='a0913037a0254b40b51d63cb2de9453c'
 
 const axios = require('axios');
 const apiUrl = 'https://api.propmix.io/pubrec/assessor/v1/GetPropertyDetails';
 
 
+//const NFTcontract="0xabc973c4071f56B169BDA0277E997031Ba52bA79";
 const NFTcontract="0x757931A28F606cD1B994966e9422675cdA744803";
 const myabi=[{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_usdcToken","type":"address"},{"internalType":"address","name":"_wbtcToken","type":"address"},{"internalType":"address","name":"_daiToken","type":"address"},{"internalType":"address","name":"_wethToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"target","type":"address"}],"name":"AddressEmptyCode","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"AddressInsufficientBalance","type":"error"},{"inputs":[],"name":"FailedInnerCall","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":true,"internalType":"string","name":"propertyNumber","type":"string"},{"indexed":false,"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"indexed":false,"internalType":"address","name":"token","type":"address"}],"name":"BonusInfoCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":true,"internalType":"string","name":"propertyNumber","type":"string"},{"indexed":false,"internalType":"uint256","name":"meetSalesCondition","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"postDeadlineCheck","type":"uint256"}],"name":"BonusInfoUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":true,"internalType":"string","name":"propertyNumber","type":"string"},{"indexed":false,"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"indexed":false,"internalType":"address","name":"token","type":"address"}],"name":"FundsWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"bonusInfo","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"uint256","name":"startDate","type":"uint256"},{"internalType":"uint256","name":"sellByDate","type":"uint256"},{"internalType":"uint256","name":"atCondition","type":"uint256"},{"internalType":"uint256","name":"minRequestDays","type":"uint256"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"uint256","name":"meetSalesCondition","type":"uint256"},{"internalType":"uint256","name":"postDeadlineCheck","type":"uint256"},{"internalType":"uint256","name":"fundsWithdrawn","type":"uint256"},{"internalType":"address","name":"token","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"startDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"sellByDateInUnixSeconds","type":"uint256"},{"internalType":"uint256","name":"atCondition","type":"uint256"},{"internalType":"uint256","name":"minRequestDays","type":"uint256"},{"internalType":"uint256","name":"atPrice","type":"uint256"},{"internalType":"uint256","name":"bonusAmount","type":"uint256"},{"internalType":"address","name":"token","type":"address"}],"name":"createBonusInfo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"daiToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyAddress","type":"string"}],"name":"payments","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"tokenApprove","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"},{"internalType":"uint256","name":"meetSalesCondition","type":"uint256"},{"internalType":"uint256","name":"postDeadlineCheck","type":"uint256"}],"name":"updateBonusInfo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdcToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wbtcToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"wethToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsReceiver","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"Sender","type":"address"},{"internalType":"address","name":"Receiver","type":"address"},{"internalType":"string","name":"propertyNumber","type":"string"}],"name":"withdrawFundsSender","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
@@ -86,20 +87,32 @@ export default function Home() {
 		}
 	  }
 
+	const getPropDetails = async() => {
+		console.log('streetaddress = '+streetaddress);
+		console.log('zipcode = '+zipcode);
+		const responser = await fetch('/api/propmix?myaddress='+streetaddress+'&myzipcode='+zipcode);
+		const data = await responser.json();
+		//console.log('Do we get a response??');
+		console.log(data.message);
+		return data.message;
+
+	}
+
 	const getPropertyDetails = async(
 		accessToken, 
 		streetAddress, 
 		postalCode, 
 		orderId) => {
+			console.log('Checking propmix');
 			  const headers = {
-				  'Access-Token': accessToken,
+				  'Access-Token': PROPERTY_API_KEY,
 				};
 				
 				// Define query parameters
 				const params = {
 				  OrderId: orderId,
-				  StreetAddress: streetAddress,
-				  PostalCode: postalCode,
+				  StreetAddress: streetaddress,
+				  PostalCode: zipcode,
 				};
 				
 				// Make the API call using Axios
@@ -223,6 +236,8 @@ export default function Home() {
 		console.log(place);
 		console.log(place['formatted_address']);
 		setMyaddress(place['formatted_address']);
+		setStreetaddress(place['address_components'][0]['long_name']+' '+place['address_components'][1]['long_name']);
+		setZipcode(place['address_components'][7]['long_name']);
 	}
 
 	const checkaddress = async() => {
@@ -231,8 +246,12 @@ export default function Home() {
 		console.log('street = '+streetaddress);
 		console.log('zip = '+zipcode);
 		var myorder = streetaddress+'_'+zipcode;
+		//await getPropDetails();
 		var response = await checkAPN();
-		var myAPN = await getPropertyInfoRentCast(myaddress);
+	
+		//var myAPN = await getPropertyInfoRentCast(myaddress);
+		var myAPN = await getPropDetails();
+		
 		console.log(myAPN);
 		console.log(typeof myAPN);
 		const myText = document.getElementById("addresscheck");
