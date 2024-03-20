@@ -48,6 +48,7 @@ export default function Home() {
   	const router = useRouter();
 	const [myaddress,setMyaddress] = useState('');
 	const [streetaddress, setStreetaddress]=useState('');
+	const [mystate, setMyState]=useState('');
 	const [zipcode, setZipcode]=useState(0);
 	const [fetchedAPN,setFetchedAPN] = useState('');
 
@@ -90,7 +91,7 @@ export default function Home() {
 	const getPropDetails = async() => {
 		console.log('streetaddress = '+streetaddress);
 		console.log('zipcode = '+zipcode);
-		const responser = await fetch('/api/propmix?myaddress='+streetaddress+'&myzipcode='+zipcode);
+		const responser = await fetch('/api/propmix?myaddress='+streetaddress+'&myzipcode='+zipcode+'&mystate='+mystate);
 		const data = await responser.json();
 		//console.log('Do we get a response??');
 		console.log(data.message);
@@ -237,7 +238,14 @@ export default function Home() {
 		console.log(place['formatted_address']);
 		setMyaddress(place['formatted_address']);
 		setStreetaddress(place['address_components'][0]['long_name']+' '+place['address_components'][1]['long_name']);
-		setZipcode(place['address_components'][7]['long_name']);
+		for (var i=0;i<8;i++){
+			console.log(place['address_components'][i]['types'][0]);
+			if(place['address_components'][i]['types'][0]=='postal_code'){
+				setZipcode(place['address_components'][i]['long_name']);
+			}
+		};
+		
+		setMyState(place['address_components'][5]['long_name']);
 	}
 
 	const checkaddress = async() => {

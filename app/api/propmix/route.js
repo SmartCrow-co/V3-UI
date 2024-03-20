@@ -13,6 +13,7 @@ export async function GET(NextRequest){
         //const { myaddress, myzipcode} = await req.query;
         const myaddress = url.searchParams.get('myaddress');
         const myzipcode = url.searchParams.get('myzipcode');
+        const mystate = url.searchParams.get('mystate');
         const orderId = myaddress+'_'+myzipcode;
         console.log('Checking propmix');
           const headers = {
@@ -24,6 +25,7 @@ export async function GET(NextRequest){
               OrderId: orderId,
               StreetAddress: myaddress,
               PostalCode: myzipcode,
+              //State: mystate
             };
             var parcelnumber;
             // Make the API call using Axios
