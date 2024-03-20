@@ -234,7 +234,12 @@ export default function Home() {
 		console.log(place['formatted_address']);
 		setMyaddress(place['formatted_address']);
 		setStreetaddress(place['address_components'][0]['long_name']+' '+place['address_components'][1]['long_name']);
-		setZipcode(place['address_components'][7]['long_name']);
+		for (var i=0;i<8;i++){
+			console.log(place['address_components'][i]['types'][0]);
+			if(place['address_components'][i]['types'][0]=='postal_code'){
+				setZipcode(place['address_components'][i]['long_name']);
+			}
+		};
 	}
 
 	const checkaddress = async() => {
