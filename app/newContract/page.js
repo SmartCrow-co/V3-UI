@@ -151,7 +151,7 @@ const MyForm = () => {
   }
 
   const sendconfirmationmail = async(mailaddress) => {
-    const apiUrl = 'https://smartcrow-backend-goerli-2.onrender.com/api/send-email'; 
+    const apiUrl = 'https://smartcrow-backend-mumbai-propmix.onrender.com/api/send-email'; 
     console.log('mail address = '+mailaddress);
     const senderwallet = document.getElementById('senderwallet').value;
     const receiverwallet = document.getElementById('receiverwallet').value;
