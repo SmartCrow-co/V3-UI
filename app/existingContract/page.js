@@ -114,7 +114,7 @@ const MyPage = () => {
 	const [popupHeaderSuccess, setPopupHeaderSuccess] = useState("");
   const [popupText, setPopupText] = useState("");
   const [accountAddress, setAccountAddress] = useState(null);
-  const [usedcoin,setUsedcoin] = useState('ETH');
+  const [usedcoin,setUsedcoin] = useState('MATIC');
 
   const searchParams = useSearchParams()
   const router = useRouter();
